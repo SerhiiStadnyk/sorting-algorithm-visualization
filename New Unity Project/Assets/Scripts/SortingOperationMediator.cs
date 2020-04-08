@@ -8,6 +8,11 @@ public class SortingOperationMediator : MonoBehaviour, ISortingHandleable
     //ArrayVisualizer arrayVisualizer;
     DataArray dataArray;
 
+    private void Awake()
+    {
+        dataArray = DataArray.Instance;
+    }
+
     public void StartSorting() 
     {
         sortingAlgorithm = SortingAlgorithmCreator.GetAlgorithm(this);

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DataArray: ScriptableObject
+public class DataArray: ScriptableObjectSingleton<DataArray>
 {
     public List<int> Array { get; private set; }
 
