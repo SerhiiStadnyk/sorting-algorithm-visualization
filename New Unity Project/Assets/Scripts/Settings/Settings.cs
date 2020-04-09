@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using ScriptableEvenetSystem;
 using UnityEngine;
 
 public enum SortingTypes
@@ -30,21 +29,26 @@ public class Settings : ScriptableObjectSingleton<Settings>
         Debug.Log($"Sorting type now is {SortingType}");
     }
 
-    public void SetRandomizerType(int id)
-    {
-        RandomizerType = (RandomizerTypes)id;
-        Debug.Log($"Randomizer type now is {RandomizerType}");
-    }
-
     public void SetDelay(int value)
     {
         Delay = value;
         Debug.Log($"Delay now is {value}");
     }
 
+    public void SetRandomizerType(int id)
+    {
+        RandomizerType = (RandomizerTypes)id;
+        OnSetArrayRandomizerType.Instance.Raise();
+
+
+        Debug.Log($"Randomizer type now is {RandomizerType}");
+    }
+
     public void SetArraySize(int value)
     {
         ArraySize = value;
+        OnArraySizeChanged.Instance.Raise();
+
         Debug.Log($"Array size now is {value}");
     }
 }
