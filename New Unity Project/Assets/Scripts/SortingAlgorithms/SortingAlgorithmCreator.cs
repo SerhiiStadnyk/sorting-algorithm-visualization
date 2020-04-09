@@ -12,12 +12,12 @@ public static class SortingAlgorithmCreator
 
         switch (Settings.Instance.SortingType)
         {
-            case SortingType.Bubble:
+            case SortingTypes.Bubble:
                 result = SortingAlgorithmCreator.CreateBubbleSorting(handleable);
                 break;
-            case SortingType.Shaker:
+            case SortingTypes.Shaker:
                 break;
-            case SortingType.QuickSort:
+            case SortingTypes.QuickSort:
                 break;
         }
         return result;
