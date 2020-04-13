@@ -4,8 +4,11 @@ using UnityEngine;
 
 namespace ScriptableEvenetSystem
 {
-    public abstract class ScriptableEventBase<T> : ScriptableObjectSingleton<T> where T : ScriptableObject
+    [Path("ScriptableEvents")]
+    public abstract class ScriptableEventBase<T> : ScriptableObjectSingleton<T> where T : ScriptableEventBase<T>
     {
+        public new string path => "ScriptableEvenets";
+
         protected List<Action> Listeners;
 
         public virtual void Raise()
