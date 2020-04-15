@@ -19,8 +19,6 @@ public enum RandomizerTypes
 [CreateAssetMenu(fileName = "Settings", menuName = "ScriptableObjects/SpawnSettings", order = 1)]
 public class Settings : ScriptableDataBase<Settings>
 {
-    public static new string path = "ScriptableData";
-
     public SortingTypes SortingType { get; private set; }
     public RandomizerTypes RandomizerType { get; private set; }
     public int Delay { get; private set; }

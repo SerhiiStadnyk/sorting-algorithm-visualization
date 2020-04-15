@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
+﻿using UnityEngine;
 using System;
 using System.Reflection;
 
@@ -11,9 +8,6 @@ using System.Reflection;
 /// <typeparam name="T"></typeparam>
 public abstract class ScriptableObjectSingleton<T>: ScriptableObject where T: ScriptableObjectSingleton<T>
 {
-    public static string path;
-    //public abstract string Path { get; }
-
     public static string DefaultPath 
     {
         get 
@@ -21,7 +15,7 @@ public abstract class ScriptableObjectSingleton<T>: ScriptableObject where T: Sc
             string directory = "ScriptableObjects";
             string typeName = typeof(T).ToString();
             return directory + "/" + typeName;
-        } 
+        }
     }
 
     private static T instance;
@@ -31,31 +25,14 @@ public abstract class ScriptableObjectSingleton<T>: ScriptableObject where T: Sc
         {
             if (instance == null)
             {
-                instance = Resources.Load<T>(GetPathReflection());
-                Debug.LogWarning(GetPathReflection());
+                instance = Resources.Load<T>(GetPathAttribute());
+                Debug.LogWarning(GetPathAttribute());
             }
             return instance;
         }
     }
 
-    private static string GetPath() 
-    {
-        string result = null;
-
-        //T fpp = new T();
-        //path = fpp.Path;
-
-        var foo = typeof(T).GetField("path");
-        var bar = foo.GetValue(foo);
-        //path = bar.ToString();
-        //instance = Resources.FindObjectsOfTypeAll<T>().FirstOrDefault();
-        //instance = Resources.Load<T>(path);
-        //Debug.LogWarning($"Path:{path}, Type:{typeof(T)}");
-
-        return result;
-    }
-
-    private static string GetPathReflection() 
+    private static string GetPathAttribute() 
     {
         Type t = typeof(T);
 
@@ -70,7 +47,7 @@ public abstract class ScriptableObjectSingleton<T>: ScriptableObject where T: Sc
 
             return result;
         }
-        else 
+        else
         {
             return DefaultPath;
         }

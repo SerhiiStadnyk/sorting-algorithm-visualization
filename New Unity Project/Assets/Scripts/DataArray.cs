@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
-public class DataArray: ScriptableObjectSingleton<DataArray>
+public class DataArray: ScriptableDataBase<DataArray>
 {
     public List<int> Array { get; private set; }
 
@@ -12,5 +10,4 @@ public class DataArray: ScriptableObjectSingleton<DataArray>
     {
         Array = array;
     }
-
 }

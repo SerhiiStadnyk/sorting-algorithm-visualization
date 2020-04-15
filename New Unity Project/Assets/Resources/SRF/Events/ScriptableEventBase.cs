@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace ScriptableEvenetSystem
 {
     [Path("ScriptableEvents")]
     public abstract class ScriptableEventBase<T> : ScriptableObjectSingleton<T> where T : ScriptableEventBase<T>
     {
-        public new string path => "ScriptableEvenets";
-
         protected List<Action> Listeners;
 
         public virtual void Raise()
