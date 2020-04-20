@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
-public class DataArray: ScriptableDataBase<DataArray>
+[CreateAssetMenu(fileName = "DataArray", menuName = "ScriptableObjects/SpawnDataArray", order = 1)]
+public class DataArray: ScriptableObject
 {
     public List<int> Array { get; private set; }
 

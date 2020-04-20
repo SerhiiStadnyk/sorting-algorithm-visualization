@@ -12,3 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d14004c0f539295408f83183d52f24e8, type: 3}
   m_Name: Settings
   m_EditorClassIdentifier: 
+  sortingType: 0
+  randomizerType: 0
+  delay: 0
+  arraySize: 0

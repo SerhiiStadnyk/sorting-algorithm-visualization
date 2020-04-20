@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class SettingsController : MonoBehaviour
+public class SettingsView : MonoBehaviour
 {
-    [SerializeField] private TMP_Dropdown sortingTypeDropDown;
-    [SerializeField] private Settings settings;
+    [SerializeField] private TMP_Dropdown sortingTypeDropDown = null;
+    [SerializeField] private Settings settings = null;
 
     private void Start()
     {

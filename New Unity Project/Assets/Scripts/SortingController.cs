@@ -1,19 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class SortingOperationMediator : MonoBehaviour, ISortingHandleable
+public class SortingController : MonoBehaviour, ISortingHandleable
 {
-    SortingAlgorithmBase sortingAlgorithm;
+    private SortingAlgorithmBase sortingAlgorithm;
     //ArrayVisualizer arrayVisualizer;
-    DataArray dataArray;
 
-    [SerializeField] private Settings settings;
-
-    private void Awake()
-    {
-        dataArray = DataArray.Instance;
-    }
+    [SerializeField] private DataArray dataArray = null;
+    [SerializeField] private Settings settings = null;
 
     public void StartSorting() 
     {
@@ -35,5 +28,6 @@ public class SortingOperationMediator : MonoBehaviour, ISortingHandleable
 
     public void FinishSorting()
     {
+        sortingAlgorithm = null;
     }
 }

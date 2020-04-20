@@ -9,6 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f35406ceb209c6949940c5bf2e2353a3, type: 3}
-  m_Name: OnArraySizeChanged
+  m_Script: {fileID: 11500000, guid: d14004c0f539295408f83183d52f24e8, type: 3}
+  m_Name: SettingsDefault
   m_EditorClassIdentifier: 
+  sortingType: 0
+  randomizerType: 0
+  delay: 0
+  arraySize: 0

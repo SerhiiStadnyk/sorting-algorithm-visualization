@@ -1,6 +1,5 @@
 ﻿using ScriptableEvenetSystem;
 using UnityEngine;
-using UnityEditor;
 
 public enum SortingTypes
 {
@@ -17,7 +16,6 @@ public enum RandomizerTypes
     Last
 };
 
-[InitializeOnLoad]
 [CreateAssetMenu(fileName = "Settings", menuName = "ScriptableObjects/SpawnSettings", order = 1)]
 public class Settings : ScriptableObject
 {
@@ -46,7 +44,6 @@ public class Settings : ScriptableObject
     {
         randomizerType = (RandomizerTypes)id;
         OnSetArrayRandomizerType.Instance.Raise();
-
 
         Debug.Log($"Randomizer type now is {randomizerType}");
     }
