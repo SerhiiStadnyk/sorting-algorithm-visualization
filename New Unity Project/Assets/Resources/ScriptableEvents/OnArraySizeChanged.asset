@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f35406ceb209c6949940c5bf2e2353a3, type: 3}
-  m_Name: Event_ArraySizeChanged
+  m_Name: OnArraySizeChanged
   m_EditorClassIdentifier: 

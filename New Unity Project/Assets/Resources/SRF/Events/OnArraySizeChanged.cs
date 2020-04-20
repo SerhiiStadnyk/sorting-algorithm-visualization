@@ -1,7 +1,15 @@
 ﻿using UnityEngine;
+using UnityEditor;
 
 namespace ScriptableEvenetSystem
 {
-    [CreateAssetMenu(fileName = "Event_ArraySizeChanged", menuName = "ScriptableObjects/Event_ArraySizeChanged", order = 2)]
-    public class OnArraySizeChanged : ScriptableEventBase<OnArraySizeChanged> { }
+    [InitializeOnLoad]
+    [CreateAssetMenu(fileName = "OnArraySizeChanged", menuName = "ScriptableObjects/OnArraySizeChanged", order = 2)]
+    public class OnArraySizeChanged : ScriptableEventBase<OnArraySizeChanged>
+    {
+        static OnArraySizeChanged()
+        {
+            CheckForInstanceEditor();
+        }
+    }
 }

@@ -5,7 +5,8 @@ using TMPro;
 
 public class SettingsController : MonoBehaviour
 {
-    public TMP_Dropdown sortingTypeDropDown;
+    [SerializeField] private TMP_Dropdown sortingTypeDropDown;
+    [SerializeField] private Settings settings;
 
     private void Start()
     {
@@ -16,7 +17,7 @@ public class SettingsController : MonoBehaviour
 
     public void Dropdown_SetSortingType(int enumId) 
     {
-        Settings.Instance.SetSortingType(enumId);
+        settings.SetSortingType(enumId);
     }
 
     public void Dropdown_SetArrayRandomizer(int enumId) 

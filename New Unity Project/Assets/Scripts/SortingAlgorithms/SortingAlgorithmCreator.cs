@@ -6,11 +6,11 @@ using System.Collections.Generic;
 /// </summary>
 public static class SortingAlgorithmCreator
 {
-    public static SortingAlgorithmBase GetAlgorithm(ISortingHandleable handleable)
+    public static SortingAlgorithmBase GetAlgorithm(ISortingHandleable handleable, SortingTypes sortingType)
     {
         SortingAlgorithmBase result = null;
 
-        switch (Settings.Instance.SortingType)
+        switch (sortingType)
         {
             case SortingTypes.Bubble:
                 result = SortingAlgorithmCreator.CreateBubbleSorting(handleable);

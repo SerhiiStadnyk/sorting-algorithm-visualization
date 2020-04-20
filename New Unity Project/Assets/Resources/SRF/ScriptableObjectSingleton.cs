@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 using System.Reflection;
+using UnityEngine;
 
 /// <summary>
 /// Automatic ScriptableObject-Singleton system
@@ -13,8 +13,7 @@ public abstract class ScriptableObjectSingleton<T>: ScriptableObject where T: Sc
         get 
         {
             string directory = "ScriptableObjects";
-            string typeName = typeof(T).ToString();
-            return directory + "/" + typeName;
+            return directory;
         }
     }
 
@@ -25,25 +24,31 @@ public abstract class ScriptableObjectSingleton<T>: ScriptableObject where T: Sc
         {
             if (instance == null)
             {
-                instance = Resources.Load<T>(GetPathAttribute());
-                Debug.LogWarning(GetPathAttribute());
+                instance = GetInstance();
             }
             return instance;
         }
+    }
+
+    private static T GetInstance() 
+    {
+        var instance = Resources.Load<T>(GetPathAttribute());
+
+        var a = Resources.FindObjectsOfTypeAll(typeof(T));
+
+        return instance;
     }
 
     private static string GetPathAttribute() 
     {
         Type t = typeof(T);
 
-        var message = t.GetCustomAttribute(typeof(PathAttribute));
+        var path = t.GetCustomAttribute(typeof(PathAttribute));
 
-        if (message != null)
+        if (path != null)
         {
-            string directory = ((PathAttribute)message).path;
-            string typeName = t.ToString();
-            string result = directory + "/" + typeName;
-            Debug.LogWarning($"Path:{directory}, Type:{t}");
+            string directory = ((PathAttribute)path).path;
+            string result = directory + "/" + t.Name;
 
             return result;
         }
@@ -51,5 +56,10 @@ public abstract class ScriptableObjectSingleton<T>: ScriptableObject where T: Sc
         {
             return DefaultPath;
         }
+    }
+
+    public static void CheckForInstanceEditor() 
+    {
+        // Feature in development
     }
 }
