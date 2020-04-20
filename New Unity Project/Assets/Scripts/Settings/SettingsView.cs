@@ -23,4 +23,12 @@ public class SettingsView : MonoBehaviour
     public void Dropdown_SetArrayRandomizer(int enumId) 
     {
     }
+
+    public void Slider_ChangeSpeed() 
+    {
+    }
+
+    public void Slider_ChangeArraySize() 
+    {
+    }
 }
