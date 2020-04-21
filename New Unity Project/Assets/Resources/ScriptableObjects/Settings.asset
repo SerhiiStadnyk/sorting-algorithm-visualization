@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sortingType: 0
   randomizerType: 0
-  delay: 0
-  arraySize: 0
+  delay: 1
+  arraySize: 280
+  minArraySize: 10

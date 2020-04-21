@@ -23,10 +23,14 @@ public class Settings : ScriptableObject
     [SerializeField] private RandomizerTypes randomizerType;
     [SerializeField] private int delay;
     [SerializeField] private int arraySize;
+    [SerializeField] private int minArraySize;
+    private int maxArraySize;
     public SortingTypes SortingType { get { return sortingType; } }
     public RandomizerTypes RandomizerType { get { return randomizerType; } }
     public int Delay { get { return delay; } }
     public int ArraySize { get { return arraySize; } }
+    public int MaxArraySize { get { return maxArraySize; } }
+    public int MinArraySize { get { return minArraySize; } }
 
     public void SetSortingType(int id) 
     {
@@ -50,9 +54,21 @@ public class Settings : ScriptableObject
 
     public void SetArraySize(int value)
     {
+        if (value > MaxArraySize)
+            value = MaxArraySize;
+        else if (value < MinArraySize)
+            value = MinArraySize;
+
         arraySize = value;
-        OnArraySizeChanged.Instance.Raise();
+        //OnArraySizeChanged.Instance.Raise();
 
         Debug.Log($"Array size now is {value}");
+    }
+
+    public void SetMaximumArraySize(int value) 
+    {
+        maxArraySize = value;
+
+        SetArraySize(ArraySize);
     }
 }
