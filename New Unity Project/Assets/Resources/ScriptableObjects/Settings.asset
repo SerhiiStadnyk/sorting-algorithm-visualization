@@ -15,5 +15,5 @@ MonoBehaviour:
   sortingType: 0
   randomizerType: 0
   delay: 1
-  arraySize: 280
-  minArraySize: 10
+  arraySize: 4
+  minArraySize: 1

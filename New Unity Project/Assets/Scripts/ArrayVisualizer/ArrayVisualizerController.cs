@@ -18,6 +18,8 @@ public class ArrayVisualizerController : MonoBehaviour
     private DataArray dataArray;
     private List<Image> elementsList = new List<Image>();
 
+    private float elementWidth;
+
     public void Init(Settings settings, DataArray dataArray) 
     {
         this.settings = settings;
@@ -28,6 +30,8 @@ public class ArrayVisualizerController : MonoBehaviour
 
     private void UpdateContainer() 
     {
+        elementWidth = GetElementWidth();
+
         int startingIndex = 0;
 
         if (elementsList.Count > 0) 
@@ -36,7 +40,7 @@ public class ArrayVisualizerController : MonoBehaviour
             {
                 if (dataArray.Array.Count > i)
                 {
-                    SetupElement(dataArray.Array[i], elementsList[i]);
+                    SetupElement(dataArray.Array[i], elementsList[i], i);
                 }
                 else 
                 {
@@ -49,14 +53,15 @@ public class ArrayVisualizerController : MonoBehaviour
         for (int i = startingIndex; i < dataArray.Array.Count; i++)
         {
             CreateElement();
-            SetupElement(dataArray.Array[i], elementsList[i]);
+            SetupElement(dataArray.Array[i], elementsList[i], i);
         }
     }
 
-    private void SetupElement(int elementValue, Image element) 
+    private void SetupElement(int elementValue, Image element, int elementIndex) 
     {
         element.gameObject.SetActive(true);
-        element.rectTransform.sizeDelta = new Vector2(GetElementWidth(), GetElementHight(elementValue));
+        element.rectTransform.sizeDelta = new Vector2(elementWidth, GetElementHight(elementValue));
+        element.transform.localPosition = GetElementPosition(elementIndex);
     }
 
     private void CreateElement()
@@ -67,20 +72,17 @@ public class ArrayVisualizerController : MonoBehaviour
         elementObject.transform.localScale = Vector3.one;
         Image element = elementObject.GetComponent<Image>();
         elementsList.Add(element);
-
-        Debug.Log("Element created");
     }
 
     private float GetElementWidth() 
     {
         float containerWidth = containerRect.rect.width;
-        float paddingSize = padding * settings.ArraySize;
-        float freeWidth = (containerWidth - paddingSize) / (settings.ArraySize * minElementWidth);
+        float dynamicWidth = containerWidth / settings.ArraySize;
 
-        if (freeWidth > maxElementWidth)
+        if (dynamicWidth > maxElementWidth)
             return maxElementWidth;
-        else if (freeWidth > minElementWidth)
-            return freeWidth;
+        else if (dynamicWidth > minElementWidth)
+            return dynamicWidth;
         else
             return minElementWidth;
     }
@@ -90,13 +92,52 @@ public class ArrayVisualizerController : MonoBehaviour
         float result = 0;
 
         float maxHeight = containerRect.rect.height;
-        Debug.LogWarning("Max height: " + maxHeight);
         float elementRatio = (float)elementValue / settings.ArraySize;
-        Debug.LogWarning("elementValue: " + elementValue);
-        Debug.LogWarning("settings.ArraySize: " + settings.ArraySize);
-        Debug.LogWarning("elementRatio: " + elementRatio);
 
         result = maxHeight * elementRatio;
+
+        return result;
+    }
+
+    private Vector2 GetElementPosition(int imageIndex) 
+    {
+        Vector2 result = Vector2.zero;
+        Debug.LogWarning("Overall elements width" + (minElementWidth + padding) * settings.ArraySize);
+        Debug.LogWarning("Overall container width" + containerRect.rect.width);
+
+        if ((maxElementWidth + padding) * settings.ArraySize < containerRect.rect.width)
+        {
+            result = GetElementPositionEqulibrium(imageIndex);
+        }
+        else 
+        {
+            result = GetElementPositionFlat(imageIndex);
+        }
+
+        return result;
+    }
+
+    private Vector2 GetElementPositionFlat(int imageIndex) 
+    {
+        float containerWidth = containerRect.rect.width;
+        float startingX = containerWidth * 0.5f * -1;
+        float xPos = startingX + (padding + elementWidth) * imageIndex + (elementWidth * 0.5f);
+
+        Vector2 result = new Vector2(xPos, containerRect.rect.height * 0.5f * -1);
+
+        return result;
+    }
+
+    private Vector2 GetElementPositionEqulibrium(int imageIndex) 
+    {
+        float containerWidth = containerRect.rect.width;
+        float xOffset = 1f / (settings.ArraySize + 1);
+
+        float gap = containerWidth * xOffset + (padding + elementWidth);
+
+        float xPos = (containerWidth * 0.5f * -1) + gap * (imageIndex + 1) + (elementWidth * 0.5f);
+
+        Vector2 result = new Vector2(xPos, containerRect.rect.height * 0.5f * -1);
 
         return result;
     }
@@ -104,8 +145,8 @@ public class ArrayVisualizerController : MonoBehaviour
     public int CalculateMaxArrayNumber() 
     {
         float containerWidth = containerRect.rect.width;
-        float paddingSize = settings.ArraySize;
-        int maxElements = (int)(containerWidth - paddingSize) / (minElementWidth + padding);
+        int maxElements = (int)((containerWidth) / (minElementWidth + padding));
+        Debug.LogWarning("Max elements: " + maxElements);
 
         return maxElements;
     }
