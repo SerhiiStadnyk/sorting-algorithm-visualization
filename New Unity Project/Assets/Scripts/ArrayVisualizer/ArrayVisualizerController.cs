@@ -96,7 +96,7 @@ public class ArrayVisualizerController : MonoBehaviour
         float result = 0;
 
         float maxHeight = containerRect.rect.height;
-        float elementRatio = (float)elementValue / settings.ArraySize;
+        float elementRatio = ((float)elementValue + 1f) / settings.ArraySize;
 
         result = maxHeight * elementRatio;
 
