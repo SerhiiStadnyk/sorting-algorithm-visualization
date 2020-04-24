@@ -4,24 +4,36 @@ using UnityEngine;
 [RequireComponent(typeof(ArrayVisualizerController))]
 public class SortingController : MonoBehaviour, ISortingHandleable
 {
-    [SerializeField] private DataArray dataArray = null;
-    [SerializeField] private Settings settings = null;
+#pragma warning disable 0649
+    [SerializeField] private DataArray dataArray;
+    [SerializeField] private Settings settings;
+    [SerializeField] private SettingsView settingsView;
+#pragma warning restore 0649
 
     private SortingAlgorithmBase sortingAlgorithm;
     private ArrayVisualizerController arrayVisualizer;
 
+    private void Awake()
+    {
+        dataArray = new DataArray();
+        arrayVisualizer = GetComponent<ArrayVisualizerController>();
+    }
+
     private void Start()
     {
-        arrayVisualizer = GetComponent<ArrayVisualizerController>();
-        arrayVisualizer.Init(dataArray);
         settings.SetMaximumArraySize(arrayVisualizer.CalculateMaxArrayNumber());
-        dataArray = new DataArray();
+        settingsView.arraySizeSlider.maxValue = settings.MaxArraySize;
+    }
+
+    public void CreateArray() 
+    {
         var tmpList = new List<int>();
         for (int i = 0; i < settings.ArraySize; i++)
         {
             tmpList.Add(i);
         }
         dataArray.SetupElements(tmpList);
+        arrayVisualizer.Init(dataArray);
     }
 
     public void StartSorting() 
