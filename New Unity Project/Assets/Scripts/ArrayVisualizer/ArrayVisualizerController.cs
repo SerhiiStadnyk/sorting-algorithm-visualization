@@ -10,9 +10,11 @@ public class ArrayVisualizerController : MonoBehaviour
 
     [SerializeField] private GameObject imagePrefab;
 
-    [SerializeField] private int minElementWidth = 3;
-    [SerializeField] private int maxElementWidth = 25;
+    [SerializeField] private float minElementWidth = 3;
+    [SerializeField] private float maxElementWidth = 25;
     [SerializeField] private int padding = 5;
+
+    [SerializeField] private bool dinamicWidth = false;
 
     private Settings settings;
     private DataArray dataArray;
@@ -25,6 +27,8 @@ public class ArrayVisualizerController : MonoBehaviour
         this.settings = settings;
         this.dataArray = dataArray;
         settings.SetMaximumArraySize(CalculateMaxArrayNumber());
+        if(dinamicWidth)
+            maxElementWidth = CalculateDynamicWidth();
         UpdateContainer();
     }
 
@@ -102,8 +106,6 @@ public class ArrayVisualizerController : MonoBehaviour
     private Vector2 GetElementPosition(int imageIndex) 
     {
         Vector2 result = Vector2.zero;
-        Debug.LogWarning("Overall elements width" + (minElementWidth + padding) * settings.ArraySize);
-        Debug.LogWarning("Overall container width" + containerRect.rect.width);
 
         if ((maxElementWidth + padding) * settings.ArraySize < containerRect.rect.width)
         {
@@ -133,12 +135,19 @@ public class ArrayVisualizerController : MonoBehaviour
         float containerWidth = containerRect.rect.width;
         float xOffset = 1f / (settings.ArraySize + 1);
 
-        float gap = containerWidth * xOffset + (padding + elementWidth);
+        float gap = containerWidth * xOffset;
 
-        float xPos = (containerWidth * 0.5f * -1) + gap * (imageIndex + 1) + (elementWidth * 0.5f);
+        float xPos = (containerWidth * 0.5f * -1) + gap * (imageIndex + 1);
 
         Vector2 result = new Vector2(xPos, containerRect.rect.height * 0.5f * -1);
 
+        return result;
+    }
+
+    private float CalculateDynamicWidth() 
+    {
+        float containerWidth = containerRect.rect.width;
+        float result = containerWidth / 40;
         return result;
     }
 
@@ -146,7 +155,6 @@ public class ArrayVisualizerController : MonoBehaviour
     {
         float containerWidth = containerRect.rect.width;
         int maxElements = (int)((containerWidth) / (minElementWidth + padding));
-        Debug.LogWarning("Max elements: " + maxElements);
 
         return maxElements;
     }
