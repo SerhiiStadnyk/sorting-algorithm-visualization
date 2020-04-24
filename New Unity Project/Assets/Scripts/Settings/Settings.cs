@@ -47,8 +47,6 @@ public class Settings : ScriptableObject
     public void SetRandomizerType(int id)
     {
         randomizerType = (RandomizerTypes)id;
-        OnSetArrayRandomizerType.Instance.Raise();
-
         Debug.Log($"Randomizer type now is {randomizerType}");
     }
 
@@ -61,8 +59,6 @@ public class Settings : ScriptableObject
 
         ArraySize = value;
         //OnArraySizeChanged.Instance.Raise();
-
-        Debug.Log($"Array size now is {value}");
     }
 
     public void SetMaximumArraySize(int value) 

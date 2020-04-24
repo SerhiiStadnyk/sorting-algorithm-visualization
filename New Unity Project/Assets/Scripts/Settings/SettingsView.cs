@@ -9,6 +9,7 @@ public class SettingsView : MonoBehaviour
 #pragma warning disable 0649
     [SerializeField] private Settings settings;
     [SerializeField] private TMP_Dropdown sortingTypeDropDown;
+    [SerializeField] private TMP_Dropdown randomzierTypeDropDown;
     [SerializeField] private SortingController sortingController;
     [SerializeField] private TMP_Text arraySizeText;
     public Slider arraySizeSlider;
@@ -19,6 +20,10 @@ public class SettingsView : MonoBehaviour
         string[] sortingList = Enum.GetNames(typeof(SortingTypes));
         List<string> names = new List<string>(sortingList);
         sortingTypeDropDown.AddOptions(names);
+
+        string[] randomizerList = Enum.GetNames(typeof(RandomizerTypes));
+        List<string> randomizerNames = new List<string>(randomizerList);
+        randomzierTypeDropDown.AddOptions(randomizerNames);
     }
 
     public void Dropdown_SetSortingType(int enumId) 
@@ -28,6 +33,7 @@ public class SettingsView : MonoBehaviour
 
     public void Dropdown_SetArrayRandomizer(int enumId) 
     {
+        settings.SetRandomizerType(enumId);
     }
 
     public void Slider_ChangeSpeed() 

@@ -5,13 +5,13 @@ using UnityEngine;
 public class SortingController : MonoBehaviour, ISortingHandleable
 {
 #pragma warning disable 0649
-    [SerializeField] private DataArray dataArray;
     [SerializeField] private Settings settings;
     [SerializeField] private SettingsView settingsView;
 #pragma warning restore 0649
 
     private SortingAlgorithmBase sortingAlgorithm;
     private ArrayVisualizerController arrayVisualizer;
+    private DataArray dataArray;
 
     private void Awake()
     {
@@ -28,12 +28,7 @@ public class SortingController : MonoBehaviour, ISortingHandleable
 
     public void CreateArray() 
     {
-        var tmpList = new List<int>();
-        for (int i = 0; i < settings.ArraySize; i++)
-        {
-            tmpList.Add(i);
-        }
-        dataArray.SetupElements(tmpList);
+        dataArray.CreateArray(settings.ArraySize, settings.RandomizerType);
         arrayVisualizer.Init(dataArray);
     }
 
