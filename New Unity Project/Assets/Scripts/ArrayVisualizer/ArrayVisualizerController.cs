@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class ArrayVisualizerController : MonoBehaviour
 {
+#pragma warning disable 0649
     [SerializeField] private RectTransform containerRect;
-    [SerializeField] private HorizontalLayoutGroup horizontalLayout;
 
     [SerializeField] private GameObject imagePrefab;
 
@@ -14,20 +14,18 @@ public class ArrayVisualizerController : MonoBehaviour
     [SerializeField] private float maxElementWidth = 25;
     [SerializeField] private int padding = 5;
 
-    [SerializeField] private bool dinamicWidth = false;
+    [SerializeField] private bool dynamicWidth = false;
+#pragma warning restore 0649
 
-    private Settings settings;
     private DataArray dataArray;
     private List<Image> elementsList = new List<Image>();
 
     private float elementWidth;
 
-    public void Init(Settings settings, DataArray dataArray) 
+    public void Init(DataArray dataArray) 
     {
-        this.settings = settings;
         this.dataArray = dataArray;
-        settings.SetMaximumArraySize(CalculateMaxArrayNumber());
-        if(dinamicWidth)
+        if(dynamicWidth)
             maxElementWidth = CalculateDynamicWidth();
         UpdateContainer();
     }
@@ -81,7 +79,7 @@ public class ArrayVisualizerController : MonoBehaviour
     private float GetElementWidth() 
     {
         float containerWidth = containerRect.rect.width;
-        float dynamicWidth = containerWidth / settings.ArraySize;
+        float dynamicWidth = containerWidth / dataArray.Array.Count;
 
         if (dynamicWidth > maxElementWidth)
             return maxElementWidth;
@@ -96,7 +94,7 @@ public class ArrayVisualizerController : MonoBehaviour
         float result = 0;
 
         float maxHeight = containerRect.rect.height;
-        float elementRatio = ((float)elementValue + 1f) / settings.ArraySize;
+        float elementRatio = ((float)elementValue + 1f) / dataArray.Array.Count;
 
         result = maxHeight * elementRatio;
 
@@ -107,7 +105,7 @@ public class ArrayVisualizerController : MonoBehaviour
     {
         Vector2 result = Vector2.zero;
 
-        if ((maxElementWidth + padding) * settings.ArraySize < containerRect.rect.width)
+        if ((maxElementWidth + padding) * dataArray.Array.Count < containerRect.rect.width)
         {
             result = GetElementPositionEqulibrium(imageIndex);
         }
@@ -133,7 +131,7 @@ public class ArrayVisualizerController : MonoBehaviour
     private Vector2 GetElementPositionEqulibrium(int imageIndex) 
     {
         float containerWidth = containerRect.rect.width;
-        float xOffset = 1f / (settings.ArraySize + 1);
+        float xOffset = 1f / (dataArray.Array.Count + 1);
 
         float gap = containerWidth * xOffset;
 

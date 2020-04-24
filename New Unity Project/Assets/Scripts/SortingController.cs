@@ -1,16 +1,20 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(ArrayVisualizerController))]
 public class SortingController : MonoBehaviour, ISortingHandleable
 {
-    private SortingAlgorithmBase sortingAlgorithm;
-    [SerializeField] private ArrayVisualizerController arrayVisualizer;
-
     [SerializeField] private DataArray dataArray = null;
     [SerializeField] private Settings settings = null;
 
+    private SortingAlgorithmBase sortingAlgorithm;
+    private ArrayVisualizerController arrayVisualizer;
+
     private void Start()
     {
+        arrayVisualizer = GetComponent<ArrayVisualizerController>();
+        arrayVisualizer.Init(dataArray);
+        settings.SetMaximumArraySize(arrayVisualizer.CalculateMaxArrayNumber());
         dataArray = new DataArray();
         var tmpList = new List<int>();
         for (int i = 0; i < settings.ArraySize; i++)
@@ -18,8 +22,6 @@ public class SortingController : MonoBehaviour, ISortingHandleable
             tmpList.Add(i);
         }
         dataArray.SetupElements(tmpList);
-
-        arrayVisualizer.Init(settings, dataArray);
     }
 
     public void StartSorting() 

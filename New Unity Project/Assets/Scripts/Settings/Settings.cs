@@ -19,11 +19,13 @@ public enum RandomizerTypes
 [CreateAssetMenu(fileName = "Settings", menuName = "ScriptableObjects/SpawnSettings", order = 1)]
 public class Settings : ScriptableObject
 {
+#pragma warning disable 0649
     [SerializeField] private SortingTypes sortingType;
     [SerializeField] private RandomizerTypes randomizerType;
     [SerializeField] private int delay;
     [SerializeField] private int arraySize;
     [SerializeField] private int minArraySize;
+#pragma warning restore 0649
     private int maxArraySize;
     public SortingTypes SortingType { get { return sortingType; } }
     public RandomizerTypes RandomizerType { get { return randomizerType; } }
