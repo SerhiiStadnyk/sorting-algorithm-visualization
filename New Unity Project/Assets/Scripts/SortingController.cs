@@ -23,6 +23,7 @@ public class SortingController : MonoBehaviour, ISortingHandleable
     {
         settings.SetMaximumArraySize(arrayVisualizer.CalculateMaxArrayNumber());
         settingsView.arraySizeSlider.maxValue = settings.MaxArraySize;
+        settingsView.arraySizeSlider.value = settings.ArraySize;
     }
 
     public void CreateArray() 
