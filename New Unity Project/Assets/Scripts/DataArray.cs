@@ -4,7 +4,12 @@ using UnityEngine;
 public class DataArray
 {
     public List<int> Array { get; private set; }
-    public void RelocateElements(int fromIndex, int toIndex) { }
+    public void RelocateElements(int fromIndex, int toIndex) 
+    {
+        int tmp = Array[fromIndex];
+        Array[fromIndex] = toIndex;
+        Array[toIndex] = tmp;
+    }
 
     public void SetupElements(List<int> array) 
     {

@@ -19,6 +19,8 @@ public class ArrayVisualizerController : MonoBehaviour
 
     private DataArray dataArray;
     private List<Image> elementsList = new List<Image>();
+    private Image elementMain;
+    private Image elementToCompare;
 
     private float elementWidth;
 
@@ -64,6 +66,7 @@ public class ArrayVisualizerController : MonoBehaviour
         element.gameObject.SetActive(true);
         element.rectTransform.sizeDelta = new Vector2(elementWidth, GetElementHight(elementValue));
         element.transform.localPosition = GetElementPosition(elementIndex);
+        element.color = Color.white;
     }
 
     private void CreateElement()
@@ -74,6 +77,36 @@ public class ArrayVisualizerController : MonoBehaviour
         elementObject.transform.localScale = Vector3.one;
         Image element = elementObject.GetComponent<Image>();
         elementsList.Add(element);
+    }
+
+    public void RemoveMarks() 
+    {
+        if (elementMain != null)
+            elementMain.color = Color.white;
+        elementMain = null;
+        if (elementToCompare != null)
+            elementToCompare.color = Color.white;
+        elementToCompare = null;
+    }
+    public void MarkMainElemet(int index) 
+    {
+        MarkElement(index, elementMain);
+    }
+    public void MarkSecondaryElemet(int index)
+    {
+        MarkElement(index, elementToCompare);
+    }
+    private void MarkElement(int index, Image image) 
+    {
+        if (image != null)
+            image.color = Color.white;
+
+        image = elementsList[index];
+        image.color = Color.red;
+    }
+    public void MarkForCheck(int index) 
+    {
+        elementsList[index].color = Color.green;
     }
 
     private float GetElementWidth() 
