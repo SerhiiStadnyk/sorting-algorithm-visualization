@@ -44,7 +44,7 @@ public class ArrayVisualizerController : MonoBehaviour
             {
                 if (dataArray.Array.Count > i)
                 {
-                    SetupElement(dataArray.Array[i], elementsList[i], i);
+                    SetupElement(dataArray.Array[i], i);
                 }
                 else 
                 {
@@ -57,16 +57,32 @@ public class ArrayVisualizerController : MonoBehaviour
         for (int i = startingIndex; i < dataArray.Array.Count; i++)
         {
             CreateElement();
-            SetupElement(dataArray.Array[i], elementsList[i], i);
+            SetupElement(dataArray.Array[i], i);
         }
     }
 
-    private void SetupElement(int elementValue, Image element, int elementIndex) 
+    private void SetupElement(int elementValue, int elementIndex) 
     {
+        Image element = elementsList[elementIndex];
         element.gameObject.SetActive(true);
         element.rectTransform.sizeDelta = new Vector2(elementWidth, GetElementHight(elementValue));
         element.transform.localPosition = GetElementPosition(elementIndex);
         element.color = Color.white;
+    }
+
+    public void UpdateElement(int elementIndex) 
+    {
+        Image element = elementsList[elementIndex];
+        int elementValue = dataArray.Array[elementIndex];
+        element.rectTransform.sizeDelta = new Vector2(elementWidth, GetElementHight(elementValue));
+    }
+    public void SwitchElements(int fromIndex, int toIndex) 
+    {
+        Image firstElement = elementsList[fromIndex];
+        Image secondElement = elementsList[toIndex];
+        float tmpHight = secondElement.rectTransform.rect.height;
+        secondElement.rectTransform.sizeDelta = new Vector2(elementWidth, firstElement.rectTransform.rect.height);
+        firstElement.rectTransform.sizeDelta = new Vector2(elementWidth, tmpHight);
     }
 
     private void CreateElement()
@@ -90,13 +106,13 @@ public class ArrayVisualizerController : MonoBehaviour
     }
     public void MarkMainElemet(int index) 
     {
-        MarkElement(index, elementMain);
+        MarkElement(index, ref elementMain);
     }
     public void MarkSecondaryElemet(int index)
     {
-        MarkElement(index, elementToCompare);
+        MarkElement(index, ref elementToCompare);
     }
-    private void MarkElement(int index, Image image) 
+    private void MarkElement(int index, ref Image image) 
     {
         if (image != null)
             image.color = Color.white;

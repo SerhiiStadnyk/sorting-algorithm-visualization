@@ -6,7 +6,7 @@ using System.Collections.Generic;
 /// </summary>
 public static class SortingAlgorithmCreator
 {
-    public static SortingAlgorithmBase GetAlgorithm(ISortingHandleable handleable, SortingTypes sortingType)
+    public static SortingAlgorithmBase GetAlgorithm(ISortingHandable handleable, SortingTypes sortingType)
     {
         SortingAlgorithmBase result = null;
 
@@ -23,7 +23,7 @@ public static class SortingAlgorithmCreator
         return result;
     }
 
-    private static SortingAlgorithmBase CreateBubbleSorting(ISortingHandleable handleable)
+    private static SortingAlgorithmBase CreateBubbleSorting(ISortingHandable handleable)
     {
         return new BubbleSorting(handleable);
     }

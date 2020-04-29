@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ISortingHandleable
+public interface ISortingHandable
 {
+    List<int> Array { get; set; }
+
     void RelocateElements(int fromIndex, int toIndex);
     void FinishSorting();
 }

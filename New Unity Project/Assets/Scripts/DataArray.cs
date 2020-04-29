@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DataArray
 {
-    public List<int> Array { get; private set; }
+    public List<int> Array { get; set; }
     public void RelocateElements(int fromIndex, int toIndex) 
     {
         int tmp = Array[fromIndex];
@@ -61,8 +61,6 @@ public class DataArray
         for (int i = 0; i < arraySize; i++)
         {
             int randomIndex = Random.Range(0, tmpList.Count - 1);
-            Debug.Log(tmpList.Count);
-            Debug.Log(randomIndex);
             int randomValue = tmpList[randomIndex];
             resultList.Add(randomValue);
             tmpList.RemoveAt(randomIndex);
