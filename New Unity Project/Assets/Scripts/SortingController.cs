@@ -16,12 +16,14 @@ public class SortingController : MonoBehaviour, ISortingHandable
     private ArrayVisualizerController arrayVisualizer;
     private DataArray dataArray;
 
-    private int waiting = 0;
+    private List<IEnumerator> replacerCorountines = new List<IEnumerator>();
+    private List<IEnumerator> checkerCorountines = new List<IEnumerator>();
 
     public List<int> Array { get => dataArray.Array; set => dataArray.Array = value; }
 
     private void Awake()
     {
+        Application.targetFrameRate = 300;
         dataArray = new DataArray();
         arrayVisualizer = GetComponent<ArrayVisualizerController>();
     }
@@ -41,15 +43,22 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
     public void StartSorting()
     {
+        CleanUp();
         sortingAlgorithm = SortingAlgorithmCreator.GetAlgorithm(this, settings.SortingType);
         sortingAlgorithm.StartSorting();
+    }
+    private void CleanUp() 
+    {
+        sortingAlgorithm = null;
+        replacerCorountines.Clear();
+        checkerCorountines.Clear();
+        arrayVisualizer.RemoveMarks();
     }
 
     public void RelocateElements(int fromIndex, int toIndex)
     {
         int index = replacerCorountines.Count;
         replacerCorountines.Add(ReplaceElementsWaiter(fromIndex, toIndex, index));
-        Debug.Log("Relocation added");
 
         //arrayVisualizer.UpdateVisuals();
         //dataArray.RelocateElements(fromIndex, toIndex);
@@ -63,47 +72,62 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
     public void FinishSorting()
     {
-        Debug.Log("Relocations overall " + replacerCorountines.Count);
+        CheckData();
+        if (replacerCorountines.Count > 0)
+            StartCoroutine(replacerCorountines[0]);
+        if (checkerCorountines.Count > 0)
+            StartCoroutine(checkerCorountines[0]);
+    }
+
+    public void Button_CheckData() 
+    {
+        CleanUp();
+        FinishSorting();
+    }
+
+    private void CheckData() 
+    {
+        bool isWrong = false;
         arrayVisualizer.RemoveMarks();
         for (int i = 0; i < dataArray.Array.Count; i++)
         {
-            checkerCorountines.Add(Waiter(i));
+            if (i != 0)
+            {
+                if (dataArray.Array[i] < dataArray.Array[i - 1])
+                    isWrong = true;
+                checkerCorountines.Add(Waiter(i, isWrong));
+            }
+            else 
+            {
+                checkerCorountines.Add(Waiter(i, isWrong));
+            }
         }
-        StartCoroutine(replacerCorountines[0]);
-
-        sortingAlgorithm = null;
     }
-    List<IEnumerator> replacerCorountines = new List<IEnumerator>();
-    List<IEnumerator> checkerCorountines = new List<IEnumerator>();
 
     IEnumerator ReplaceElementsWaiter(int fromIndex, int toIndex, int i)
     {
-        Debug.Log("Relocation operation");
         arrayVisualizer.MarkMainElemet(fromIndex);
         arrayVisualizer.MarkSecondaryElemet(toIndex);
-        //yield return new WaitForSecondsRealtime(0.05f);
         yield return null;
         arrayVisualizer.SwitchElements(fromIndex, toIndex);
         if (i + 1 < replacerCorountines.Count)
         {
-            Debug.Log("New relocation operation");
             StartCoroutine(replacerCorountines[i + 1]);
         }
-        else
+        else 
         {
-            Debug.Log("Operations: " + i);
-            StartCoroutine(checkerCorountines[0]);
+            replacerCorountines.Clear();
         }
-        Debug.LogWarning("Operations ended");
     }
 
-    IEnumerator Waiter(int i) 
+    IEnumerator Waiter(int i, bool isWrong) 
     {
-        //yield return new WaitForSecondsRealtime(0.02f);
+        while(replacerCorountines.Count > 0)
+            yield return null;
+
         yield return null;
-        arrayVisualizer.MarkForCheck(i);
+        arrayVisualizer.MarkForCheck(i, isWrong);
         if(i + 1 < checkerCorountines.Count)
             StartCoroutine(checkerCorountines[i + 1]);
-        //checkerCorountines.Clear();
     }
 }

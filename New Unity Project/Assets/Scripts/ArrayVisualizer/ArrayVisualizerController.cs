@@ -97,12 +97,7 @@ public class ArrayVisualizerController : MonoBehaviour
 
     public void RemoveMarks() 
     {
-        if (elementMain != null)
-            elementMain.color = Color.white;
-        elementMain = null;
-        if (elementToCompare != null)
-            elementToCompare.color = Color.white;
-        elementToCompare = null;
+        elementsList.ForEach(image => image.color = Color.white);
     }
     public void MarkMainElemet(int index) 
     {
@@ -120,9 +115,12 @@ public class ArrayVisualizerController : MonoBehaviour
         image = elementsList[index];
         image.color = Color.red;
     }
-    public void MarkForCheck(int index) 
+    public void MarkForCheck(int index, bool isWrong) 
     {
-        elementsList[index].color = Color.green;
+        if (isWrong)
+            elementsList[index].color = Color.red;
+        else
+            elementsList[index].color = Color.green;
     }
 
     private float GetElementWidth() 
