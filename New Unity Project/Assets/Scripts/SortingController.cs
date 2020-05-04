@@ -16,14 +16,11 @@ public class SortingController : MonoBehaviour, ISortingHandable
     private ArrayVisualizerController arrayVisualizer;
     private DataArray dataArray;
 
-    private List<IEnumerator> replacerCorountines = new List<IEnumerator>();
-    private List<IEnumerator> checkerCorountines = new List<IEnumerator>();
-
     public List<int> Array { get => dataArray.Array; set => dataArray.Array = value; }
 
     private void Awake()
     {
-        Application.targetFrameRate = 300;
+        //Application.targetFrameRate = 60;
         dataArray = new DataArray();
         arrayVisualizer = GetComponent<ArrayVisualizerController>();
     }
@@ -45,47 +42,44 @@ public class SortingController : MonoBehaviour, ISortingHandable
     {
         CleanUp();
         sortingAlgorithm = SortingAlgorithmCreator.GetAlgorithm(this, settings.SortingType);
-        sortingAlgorithm.StartSorting();
+        StartCoroutine(StateSorting());
     }
-    private void CleanUp() 
+    private void CleanUp()
     {
         sortingAlgorithm = null;
-        replacerCorountines.Clear();
-        checkerCorountines.Clear();
         arrayVisualizer.RemoveMarks();
     }
 
     public void RelocateElements(int fromIndex, int toIndex)
     {
-        int index = replacerCorountines.Count;
-        replacerCorountines.Add(ReplaceElementsWaiter(fromIndex, toIndex, index));
-
-        //arrayVisualizer.UpdateVisuals();
-        //dataArray.RelocateElements(fromIndex, toIndex);
-        //arrayVisualizer.CompareVisuals(fromIndex, toIndex);
+        arrayVisualizer.UpdateElement(fromIndex);
+        arrayVisualizer.UpdateElement(toIndex);
     }
 
-    public void CompareElements(int firstElementIndex, int secondElementIndex)
-    {
-        //arrayVisualizer.CompareVisuals(firstElementIndex, secondElementIndex);
-    }
+    public void FinishSorting() { }
 
-    public void FinishSorting()
-    {
-        CheckData();
-        if (replacerCorountines.Count > 0)
-            StartCoroutine(replacerCorountines[0]);
-        if (checkerCorountines.Count > 0)
-            StartCoroutine(checkerCorountines[0]);
-    }
-
-    public void Button_CheckData() 
+    public void Button_CheckData()
     {
         CleanUp();
-        FinishSorting();
+        StartCoroutine(CheckData());
     }
 
-    private void CheckData() 
+    private IEnumerator StateSorting()
+    {
+        while (sortingAlgorithm.IsSorted == false)
+        {
+            yield return null;
+            for (int i = 0; i < 1; i++)
+            {
+                sortingAlgorithm.SortingStep();
+            }
+            arrayVisualizer.MarkElements();
+        }
+
+        StartCoroutine(CheckData());
+    }
+
+    private IEnumerator CheckData() 
     {
         bool isWrong = false;
         arrayVisualizer.RemoveMarks();
@@ -95,39 +89,20 @@ public class SortingController : MonoBehaviour, ISortingHandable
             {
                 if (dataArray.Array[i] < dataArray.Array[i - 1])
                     isWrong = true;
-                checkerCorountines.Add(Waiter(i, isWrong));
+
+                arrayVisualizer.MarkForCheck(i, isWrong);
             }
-            else 
+            else
             {
-                checkerCorountines.Add(Waiter(i, isWrong));
+                arrayVisualizer.MarkForCheck(i, isWrong);
             }
-        }
-    }
 
-    IEnumerator ReplaceElementsWaiter(int fromIndex, int toIndex, int i)
-    {
-        arrayVisualizer.MarkMainElemet(fromIndex);
-        arrayVisualizer.MarkSecondaryElemet(toIndex);
-        yield return null;
-        arrayVisualizer.SwitchElements(fromIndex, toIndex);
-        if (i + 1 < replacerCorountines.Count)
-        {
-            StartCoroutine(replacerCorountines[i + 1]);
-        }
-        else 
-        {
-            replacerCorountines.Clear();
-        }
-    }
-
-    IEnumerator Waiter(int i, bool isWrong) 
-    {
-        while(replacerCorountines.Count > 0)
             yield return null;
+        }
+    }
 
-        yield return null;
-        arrayVisualizer.MarkForCheck(i, isWrong);
-        if(i + 1 < checkerCorountines.Count)
-            StartCoroutine(checkerCorountines[i + 1]);
+    public void MarkElements(params int[] markedElements)
+    {
+        arrayVisualizer.AddMarks(markedElements);
     }
 }

@@ -19,8 +19,10 @@ public class ArrayVisualizerController : MonoBehaviour
 
     private DataArray dataArray;
     private List<Image> elementsList = new List<Image>();
+    private List<Image> markedElements = new List<Image>();
     private Image elementMain;
     private Image elementToCompare;
+    private List<int> marksList = new List<int>();
 
     private float elementWidth;
 
@@ -87,7 +89,6 @@ public class ArrayVisualizerController : MonoBehaviour
 
     private void CreateElement()
     {
-        //Image element = Instantiate<Image>(new GameObject().GetComponent<Image>());
         GameObject elementObject = Instantiate(imagePrefab);
         elementObject.transform.SetParent(containerRect);
         elementObject.transform.localScale = Vector3.one;
@@ -99,22 +100,30 @@ public class ArrayVisualizerController : MonoBehaviour
     {
         elementsList.ForEach(image => image.color = Color.white);
     }
-    public void MarkMainElemet(int index) 
+    public void MarkElements() 
     {
-        MarkElement(index, ref elementMain);
-    }
-    public void MarkSecondaryElemet(int index)
-    {
-        MarkElement(index, ref elementToCompare);
-    }
-    private void MarkElement(int index, ref Image image) 
-    {
-        if (image != null)
-            image.color = Color.white;
+        if (markedElements.Count > 0) 
+        {
+            markedElements.ForEach(image => image.color = Color.white);
+            markedElements.Clear();
+        }
 
-        image = elementsList[index];
-        image.color = Color.red;
+        for (int i = 0; i < marksList.Count; i++)
+        {
+            markedElements.Add(elementsList[marksList[i]]);
+            elementsList[marksList[i]].color = Color.red;
+        }
+
+        marksList.Clear();
     }
+    public void AddMarks(params int[] indexArray) 
+    {
+        for (int i = 0; i < indexArray.Length; i++)
+        {
+            marksList.Add(indexArray[i]);
+        }
+    }
+
     public void MarkForCheck(int index, bool isWrong) 
     {
         if (isWrong)

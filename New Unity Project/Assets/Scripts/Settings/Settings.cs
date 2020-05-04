@@ -35,19 +35,16 @@ public class Settings : ScriptableObject
     public void SetSortingType(int id) 
     {
         sortingType = (SortingTypes)id;
-        Debug.Log($"Sorting type now is {sortingType}");
     }
 
     public void SetDelay(int value)
     {
         delay = value;
-        Debug.Log($"Delay now is {value}");
     }
 
     public void SetRandomizerType(int id)
     {
         randomizerType = (RandomizerTypes)id;
-        Debug.Log($"Randomizer type now is {randomizerType}");
     }
 
     public void SetArraySize(int value)
@@ -58,7 +55,6 @@ public class Settings : ScriptableObject
             value = MinArraySize;
 
         ArraySize = value;
-        //OnArraySizeChanged.Instance.Raise();
     }
 
     public void SetMaximumArraySize(int value) 
