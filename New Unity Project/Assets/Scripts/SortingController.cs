@@ -16,6 +16,9 @@ public class SortingController : MonoBehaviour, ISortingHandable
     private ArrayVisualizerController arrayVisualizer;
     private DataArray dataArray;
 
+    private Coroutine sortingCoroutine;
+    private Coroutine checkingCoroutine;
+
     public List<int> Array { get => dataArray.Array; set => dataArray.Array = value; }
 
     private void Awake()
@@ -42,7 +45,10 @@ public class SortingController : MonoBehaviour, ISortingHandable
     {
         CleanUp();
         sortingAlgorithm = SortingAlgorithmCreator.GetAlgorithm(this, settings.SortingType);
-        StartCoroutine(StateSorting());
+
+        if (sortingCoroutine != null)
+            StopCoroutine(sortingCoroutine);
+        sortingCoroutine = StartCoroutine(StateSorting());
     }
     private void CleanUp()
     {
@@ -61,7 +67,9 @@ public class SortingController : MonoBehaviour, ISortingHandable
     public void Button_CheckData()
     {
         CleanUp();
-        StartCoroutine(CheckData());
+        if (checkingCoroutine != null)
+            StopCoroutine(checkingCoroutine);
+        checkingCoroutine = StartCoroutine(CheckData());
     }
 
     private IEnumerator StateSorting()
@@ -76,7 +84,9 @@ public class SortingController : MonoBehaviour, ISortingHandable
             arrayVisualizer.MarkElements();
         }
 
-        StartCoroutine(CheckData());
+        if (checkingCoroutine != null)
+            StopCoroutine(checkingCoroutine);
+        checkingCoroutine = StartCoroutine(CheckData());
     }
 
     private IEnumerator CheckData() 
