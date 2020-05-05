@@ -13,7 +13,13 @@ public enum RandomizerTypes
     Sorted,
     Random,
     Inverse,
-    Last
+    Last,
+    Half,
+    HalfReverse,
+    Mirrored,
+    MirroredReverse,
+    Pyramid,
+    PyramidReverse
 };
 
 [CreateAssetMenu(fileName = "Settings", menuName = "ScriptableObjects/SpawnSettings", order = 1)]

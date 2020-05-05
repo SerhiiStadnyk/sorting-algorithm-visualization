@@ -32,16 +32,36 @@ public class DataArray
             case RandomizerTypes.Last:
                 SetupElements(CreateArrayLast(arraySize));
                 break;
+            case RandomizerTypes.Half:
+                SetupElements(CreateArrayHalf(arraySize));
+                break;
+            case RandomizerTypes.HalfReverse:
+                SetupElements(CreateArrayHalfReverse(arraySize));
+                break;
+            case RandomizerTypes.Mirrored:
+                SetupElements(CreateArrayMirrored(arraySize));
+                break;
+            case RandomizerTypes.MirroredReverse:
+                SetupElements(CreateArrayMirroredReverse(arraySize));
+                break;
+            case RandomizerTypes.Pyramid:
+                SetupElements(CreateArrayPyramid(arraySize));
+                break;
+            case RandomizerTypes.PyramidReverse:
+                SetupElements(CreateArrayPyramidReverse(arraySize));
+                break;
             default:
                 SetupElements(CreateArraySorted(arraySize));
                 break;
         }
     }
 
-    private List<int> CreateArraySorted(int arraySize) 
+    private List<int> CreateArraySorted(int arraySize, int startIndex = 0) 
     {
+        arraySize = arraySize + startIndex;
+
         var tmpList = new List<int>();
-        for (int i = 0; i < arraySize; i++)
+        for (int i = startIndex; i < arraySize; i++)
         {
             tmpList.Add(i);
         }
@@ -49,16 +69,18 @@ public class DataArray
         return tmpList;
     }
 
-    private List<int> CreateArrayRandom(int arraySize)
+    private List<int> CreateArrayRandom(int arraySize, int startIndex = 0)
     {
+        arraySize = arraySize + startIndex;
+
         var resultList = new List<int>();
         var tmpList = new List<int>();
-        for (int i = 0; i < arraySize; i++)
+        for (int i = startIndex; i < arraySize; i++)
         {
             tmpList.Add(i);
         }
 
-        for (int i = 0; i < arraySize; i++)
+        for (int i = startIndex; i < arraySize; i++)
         {
             int randomIndex = Random.Range(0, tmpList.Count - 1);
             int randomValue = tmpList[randomIndex];
@@ -69,10 +91,10 @@ public class DataArray
         return resultList;
     }
 
-    private List<int> CreateArrayInverted(int arraySize)
+    private List<int> CreateArrayInverted(int arraySize, int startIndex = 0)
     {
         var tmpList = new List<int>();
-        for (int i = arraySize; i >= 0; i--)
+        for (int i = arraySize; i >= startIndex; i--)
         {
             tmpList.Add(i);
         }
@@ -90,6 +112,77 @@ public class DataArray
         int tmp = tmpList[0];
         tmpList[0] = tmpList[tmpList.Count - 1];
         tmpList[tmpList.Count - 1] = tmp;
+
+        return tmpList;
+    }
+
+    private List<int> CreateArrayHalf(int arraySize)
+    {
+        var tmpList = CreateArraySorted((int)(arraySize * 0.5f));
+        var randomList = CreateArrayRandom(Mathf.CeilToInt(arraySize * 0.5f), (int)(arraySize*0.5f));
+        randomList.ForEach(element => tmpList.Add(element));
+
+        return tmpList;
+    }
+
+    private List<int> CreateArrayHalfReverse(int arraySize)
+    {
+        var tmpList = CreateArraySorted(Mathf.CeilToInt(arraySize * 0.5f), (int)(arraySize * 0.5f));
+        var randomList = CreateArrayRandom((int)(arraySize * 0.5f));
+        tmpList.ForEach(element => randomList.Add(element));
+
+        return randomList;
+    }
+
+    private List<int> CreateArrayMirrored(int arraySize)
+    {
+        var tmpList = CreateArraySorted((int)(arraySize * 0.5f));
+        var invertList = CreateArrayInverted(arraySize - 1, (int)(arraySize * 0.5f));
+        invertList.ForEach(element => tmpList.Add(element));
+
+        return tmpList;
+    }
+
+    private List<int> CreateArrayMirroredReverse(int arraySize)
+    {
+        var invertList = CreateArrayInverted((int)(arraySize * 0.5f));
+
+        var tmpList = CreateArraySorted((int)(arraySize * 0.5f), Mathf.CeilToInt(arraySize * 0.5f));
+        invertList.ForEach(element => tmpList.Add(element));
+
+        return tmpList;
+    }
+
+    private List<int> CreateArrayPyramid(int arraySize)
+    {
+        var tmpList = new List<int>();
+        var tmpListSecond = new List<int>();
+
+        for (int i = 0; i < arraySize; i+= 2)
+        {
+            tmpList.Add(i);
+        }
+        for (int i = arraySize - 1; i > 0; i -= 2)
+        {
+            tmpList.Add(i);
+        }
+
+        return tmpList;
+    }
+
+    private List<int> CreateArrayPyramidReverse(int arraySize)
+    {
+        var tmpList = new List<int>();
+        var tmpListSecond = new List<int>();
+
+        for (int i = arraySize - 1; i > 0; i -= 2)
+        {
+            tmpList.Add(i);
+        }
+        for (int i = 0; i < arraySize; i += 2)
+        {
+            tmpList.Add(i);
+        }
 
         return tmpList;
     }
