@@ -23,7 +23,7 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
     private void Awake()
     {
-        //Application.targetFrameRate = 60;
+        Application.targetFrameRate = settings.MaxFps;
         dataArray = new DataArray();
         arrayVisualizer = GetComponent<ArrayVisualizerController>();
     }
@@ -77,7 +77,7 @@ public class SortingController : MonoBehaviour, ISortingHandable
         while (sortingAlgorithm.IsSorted == false)
         {
             yield return null;
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < settings.SortingTactsPerFrame; i++)
             {
                 sortingAlgorithm.SortingStep();
             }

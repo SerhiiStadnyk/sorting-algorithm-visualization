@@ -32,6 +32,29 @@ public class Settings : ScriptableObject
     public int MaxArraySize { get; private set; }
     public int MinArraySize { get { return minArraySize; } }
 
+    public int MaxFps { get; private set; }
+    public int SortingTactsPerFrame { get; private set; }
+
+    public void SetMaxFps(int value)
+    {
+        if (value < 5)
+            MaxFps = 5;
+        else
+            MaxFps = value;
+
+        Application.targetFrameRate = MaxFps;
+    }
+
+    public void SetSortingTactsPerFrame(int value)
+    {
+        if(value <= 0)
+            SortingTactsPerFrame = 1;
+        else if(value <= ArraySize)
+            SortingTactsPerFrame = value;
+        else
+            SortingTactsPerFrame = ArraySize;
+    }
+
     public void SetSortingType(int id) 
     {
         sortingType = (SortingTypes)id;

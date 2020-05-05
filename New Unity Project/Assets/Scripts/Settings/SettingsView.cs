@@ -12,6 +12,8 @@ public class SettingsView : MonoBehaviour
     [SerializeField] private TMP_Dropdown randomzierTypeDropDown;
     [SerializeField] private SortingController sortingController;
     [SerializeField] private TMP_Text arraySizeText;
+    [SerializeField] private TMP_InputField maxFps;
+    [SerializeField] private TMP_InputField tactsPerFrame;
     public Slider arraySizeSlider;
 #pragma warning restore 0649
 
@@ -26,6 +28,9 @@ public class SettingsView : MonoBehaviour
         List<string> randomizerNames = new List<string>(randomizerList);
         randomzierTypeDropDown.AddOptions(randomizerNames);
         randomzierTypeDropDown.value = (int)settings.RandomizerType;
+
+        tactsPerFrame.text = settings.SortingTactsPerFrame.ToString();
+        maxFps.text = settings.MaxFps.ToString();
     }
 
     public void Dropdown_SetSortingType(int enumId) 
@@ -38,10 +43,6 @@ public class SettingsView : MonoBehaviour
         settings.SetRandomizerType(enumId);
     }
 
-    public void Slider_ChangeSpeed() 
-    {
-    }
-
     public void Slider_ChangeArraySize() 
     {
         arraySizeText.text = arraySizeSlider.value.ToString();
@@ -51,5 +52,27 @@ public class SettingsView : MonoBehaviour
     public void Button_CreateArray() 
     {
         sortingController.CreateArray();
+    }
+
+    public void Input_MaxFps(string value) 
+    {
+        int tmp;
+        if (string.IsNullOrEmpty(value))
+            tmp = 0;
+        else
+            tmp = int.Parse(value);
+        settings.SetMaxFps(tmp);
+        maxFps.text = settings.MaxFps.ToString();
+    }
+
+    public void Input_TactsPerFrame(string value) 
+    {
+        int tmp;
+        if (string.IsNullOrEmpty(value))
+            tmp = 0;
+        else
+            tmp = int.Parse(value);
+        settings.SetSortingTactsPerFrame(tmp);
+        tactsPerFrame.text = settings.SortingTactsPerFrame.ToString();
     }
 }
