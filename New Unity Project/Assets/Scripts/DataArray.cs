@@ -145,10 +145,8 @@ public class DataArray
 
     private List<int> CreateArrayMirroredReverse(int arraySize)
     {
-        var invertList = CreateArrayInverted((int)(arraySize * 0.5f));
-
-        var tmpList = CreateArraySorted((int)(arraySize * 0.5f), Mathf.CeilToInt(arraySize * 0.5f));
-        invertList.ForEach(element => tmpList.Add(element));
+        var tmpList = CreateArrayMirrored(arraySize);
+        tmpList.Reverse();
 
         return tmpList;
     }

@@ -38,8 +38,8 @@ public class Settings : ScriptableObject
     public int MaxArraySize { get; private set; }
     public int MinArraySize { get { return minArraySize; } }
 
-    public int MaxFps { get; private set; }
-    public int SortingTactsPerFrame { get; private set; }
+    public int MaxFps { get; private set; } = 5;
+    public int SortingTactsPerFrame { get; private set; } = 1;
 
     public void SetMaxFps(int value)
     {

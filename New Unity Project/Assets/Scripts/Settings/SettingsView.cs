@@ -52,6 +52,7 @@ public class SettingsView : MonoBehaviour
     public void Button_CreateArray() 
     {
         sortingController.CreateArray();
+        Input_TactsPerFrame(settings.SortingTactsPerFrame.ToString());
     }
 
     public void Input_MaxFps(string value) 
