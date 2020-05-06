@@ -1,47 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class BubbleSorting : SortingAlgorithmBase, ISortingHandable
+﻿public class BubbleSorting : SortingAlgorithmBase
 {
     public override ISortingHandable Handleable { get; set; }
-    public List<int> Array { get => Handleable.Array; set => Handleable.Array = value; }
 
     public BubbleSorting(ISortingHandable handleable) : base(handleable) { }
 
     private bool arrayChanged = false;
-    private bool isSorted = false;
-    public override bool IsSorted => isSorted;
 
     private int stepA = 0;
     private int stepB = 0;
-
-    public override void StartSorting()
-    {
-        Sorting();
-    }
-
-    private void Sorting() 
-    {
-        for (int i = 0; i < Array.Count; i++)
-        {
-            isSorted = true;
-            for (int a = 0; a < Array.Count - 1 - i; a++)
-            {
-                if (Array[a] > Array[a + 1])
-                {
-                    int tmp = Array[a];
-                    Array[a] = Array[a + 1];
-                    Array[a + 1] = tmp;
-
-                    RelocateElements(a, a + 1);
-                }
-            }
-        }
-
-        if (IsSorted)
-            FinishSorting();
-    }
 
     public override void SortingStep()
     {
@@ -70,7 +36,7 @@ public class BubbleSorting : SortingAlgorithmBase, ISortingHandable
 
             if (arrayChanged == false)
             {
-                isSorted = true;
+                FinishSorting();
                 return;
             }
 
@@ -78,8 +44,6 @@ public class BubbleSorting : SortingAlgorithmBase, ISortingHandable
             stepA++;
             return;
         }
-
-        isSorted = true;
     }
 
     public void MarkElements(params int[] markedElements) 
