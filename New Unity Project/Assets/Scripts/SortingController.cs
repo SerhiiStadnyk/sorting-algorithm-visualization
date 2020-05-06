@@ -43,6 +43,9 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
     public void StartSorting()
     {
+        if (dataArray.Array == null || dataArray.Array.Count == 0)
+            return;
+
         CleanUp();
         sortingAlgorithm = SortingAlgorithmCreator.GetAlgorithm(this, settings.SortingType);
 
