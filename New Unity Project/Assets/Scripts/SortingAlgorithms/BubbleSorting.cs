@@ -1,49 +1,38 @@
-﻿public class BubbleSorting : SortingAlgorithmBase
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+public class BubbleSorting : SortingAlgorithmBase
 {
     public override ISortingHandable Handleable { get; set; }
 
     public BubbleSorting(ISortingHandable handleable) : base(handleable) { }
 
-    private bool arrayChanged = false;
-
-    private int stepA = 0;
-    private int stepB = 0;
-
-    public override void SortingStep()
+    public override IEnumerable<int> Sort() 
     {
-        if (stepB == 0)
-            arrayChanged = false;
-
-        if (stepA < Array.Count)
+        for (int i = 0; i < Array.Count; i++)
         {
-            if (stepB < Array.Count - stepA - 1)
+            bool isSorted = true;
+            for (int a = 0; a < Array.Count - i - 1; a++)
             {
-
-                if (Array[stepB] > Array[stepB + 1])
+                if (Array[a] > Array[a + 1])
                 {
-                    int tmp = Array[stepB];
-                    Array[stepB] = Array[stepB + 1];
-                    Array[stepB + 1] = tmp;
-
-                    RelocateElements(stepB, stepB + 1);
+                    int tmp = Array[a];
+                    Array[a] = Array[a + 1];
+                    Array[a + 1] = tmp;
+                    RelocateElements(a, a + 1);
+                    isSorted = false;
                 }
-
-                MarkElements(stepB, stepB + 1);
-
-                stepB++;
-                return;
+                MarkElements(a, a + 1);
+                yield return i;
             }
 
-            if (arrayChanged == false)
+            if (isSorted)
             {
                 FinishSorting();
-                return;
+                yield break;
             }
-
-            stepB = 0;
-            stepA++;
-            return;
         }
+        FinishSorting();
     }
 
     public void MarkElements(params int[] markedElements) 
@@ -53,7 +42,6 @@
 
     public void RelocateElements(int fromIndex, int toIndex)
     {
-        arrayChanged = true;
         Handleable.RelocateElements(fromIndex, toIndex);
     }
 

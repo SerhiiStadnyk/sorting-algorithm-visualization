@@ -3,8 +3,7 @@
 public abstract class SortingAlgorithmBase
 {
     public abstract ISortingHandable Handleable { get; set; }
-
-    public abstract void SortingStep();
+    public abstract IEnumerable<int> Sort();
 
     public List<int> Array { get => Handleable.Array; set => Handleable.Array = value; }
 
