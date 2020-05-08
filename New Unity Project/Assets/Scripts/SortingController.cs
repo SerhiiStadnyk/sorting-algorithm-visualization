@@ -99,6 +99,8 @@ public class SortingController : MonoBehaviour, ISortingHandable
                     break;
                 sortingAlgorithm.SortingStep();
             }
+            if (doSorting == false)
+                break;
             arrayVisualizer.MarkElements();
         }
     }
