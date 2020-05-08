@@ -3,7 +3,7 @@ using UnityEditor;
 using System;
 using System.Reflection;
 
-[InitializeOnLoad]
+//[InitializeOnLoad]
 class ScriptableController
 {
     static ScriptableController()

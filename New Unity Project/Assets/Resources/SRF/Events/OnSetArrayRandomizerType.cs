@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using ScriptableEvenetSystem;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace ScriptableEvenetSystem
 {
-    [InitializeOnLoad]
+    //[InitializeOnLoad]
     [CreateAssetMenu(fileName = "OnSetArrayRandomizerType", menuName = "ScriptableObjects/OnSetArrayRandomizerType", order = 2)]
-    public class OnSetArrayRandomizerType : ScriptableEventBase<OnSetArrayRandomizerType> 
+    public class OnSetArrayRandomizerType : ScriptableEventBase<OnSetArrayRandomizerType>
     {
         private void OnEnable()
         {

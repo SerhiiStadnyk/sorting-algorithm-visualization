@@ -3,7 +3,7 @@ using UnityEditor;
 
 namespace ScriptableEvenetSystem
 {
-    [InitializeOnLoad]
+    //[InitializeOnLoad]
     [CreateAssetMenu(fileName = "OnArraySizeChanged", menuName = "ScriptableObjects/OnArraySizeChanged", order = 2)]
     public class OnArraySizeChanged : ScriptableEventBase<OnArraySizeChanged>
     {

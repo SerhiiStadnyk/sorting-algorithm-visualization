@@ -29,6 +29,7 @@ public class SettingsView : MonoBehaviour
         randomzierTypeDropDown.AddOptions(randomizerNames);
         randomzierTypeDropDown.value = (int)settings.RandomizerType;
 
+        QualitySettings.vSyncCount = 0;
         tactsPerFrame.text = settings.SortingTactsPerFrame.ToString();
         maxFps.text = settings.MaxFps.ToString();
     }

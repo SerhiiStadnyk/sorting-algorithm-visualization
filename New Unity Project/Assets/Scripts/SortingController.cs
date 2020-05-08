@@ -49,6 +49,9 @@ public class SortingController : MonoBehaviour, ISortingHandable
         CleanUp();
         sortingAlgorithm = SortingAlgorithmCreator.GetAlgorithm(this, settings.SortingType);
 
+        doSorting = true;
+        if (checkingCoroutine != null)
+            StopCoroutine(checkingCoroutine);
         if (sortingCoroutine != null)
             StopCoroutine(sortingCoroutine);
         sortingCoroutine = StartCoroutine(StateSorting());
@@ -73,8 +76,11 @@ public class SortingController : MonoBehaviour, ISortingHandable
         checkingCoroutine = StartCoroutine(CheckData());
     }
 
+    bool doSorting = false;
     public void FinishSorting()
     {
+        Debug.LogWarning("Finished");
+        doSorting = false;
         StopCoroutine(sortingCoroutine);
 
         if (checkingCoroutine != null)
@@ -84,11 +90,13 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
     private IEnumerator StateSorting()
     {
-        while (true)
+        while (doSorting)
         {
             yield return null;
             for (int i = 0; i < settings.SortingTactsPerFrame; i++)
             {
+                if (doSorting == false)
+                    break;
                 sortingAlgorithm.SortingStep();
             }
             arrayVisualizer.MarkElements();
