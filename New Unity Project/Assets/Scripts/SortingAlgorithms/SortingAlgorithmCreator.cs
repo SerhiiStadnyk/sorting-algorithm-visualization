@@ -16,6 +16,7 @@ public static class SortingAlgorithmCreator
                 result = SortingAlgorithmCreator.CreateBubbleSorting(handleable);
                 break;
             case SortingTypes.Shaker:
+                result = SortingAlgorithmCreator.CreateShakerSorting(handleable);
                 break;
             case SortingTypes.QuickSort:
                 break;
@@ -26,5 +27,10 @@ public static class SortingAlgorithmCreator
     private static SortingAlgorithmBase CreateBubbleSorting(ISortingHandable handleable)
     {
         return new BubbleSorting(handleable);
+    }
+
+    private static SortingAlgorithmBase CreateShakerSorting(ISortingHandable handleable)
+    {
+        return new ShakerSorting(handleable);
     }
 }
