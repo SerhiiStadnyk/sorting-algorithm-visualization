@@ -23,7 +23,6 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
     private void Awake()
     {
-        Application.targetFrameRate = settings.MaxFps;
         dataArray = new DataArray();
         arrayVisualizer = GetComponent<ArrayVisualizerController>();
     }
@@ -93,7 +92,7 @@ public class SortingController : MonoBehaviour, ISortingHandable
             {
                 counter = 1;
                 arrayVisualizer.MarkElements();
-                yield return null;
+                yield return new WaitForSeconds(settings.Delay / 1000f);
             }
             else 
             {
@@ -120,7 +119,7 @@ public class SortingController : MonoBehaviour, ISortingHandable
                 arrayVisualizer.MarkForCheck(i, isWrong);
             }
 
-            yield return null;
+            yield return new WaitForSeconds(settings.Delay / 1000f);
         }
     }
 

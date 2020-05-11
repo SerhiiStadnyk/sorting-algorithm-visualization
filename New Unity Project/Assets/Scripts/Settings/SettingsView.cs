@@ -12,7 +12,7 @@ public class SettingsView : MonoBehaviour
     [SerializeField] private TMP_Dropdown randomzierTypeDropDown;
     [SerializeField] private SortingController sortingController;
     [SerializeField] private TMP_Text arraySizeText;
-    [SerializeField] private TMP_InputField maxFps;
+    [SerializeField] private TMP_InputField delay;
     [SerializeField] private TMP_InputField tactsPerFrame;
     public Slider arraySizeSlider;
 #pragma warning restore 0649
@@ -29,9 +29,11 @@ public class SettingsView : MonoBehaviour
         randomzierTypeDropDown.AddOptions(randomizerNames);
         randomzierTypeDropDown.value = (int)settings.RandomizerType;
 
-        QualitySettings.vSyncCount = 0;
         tactsPerFrame.text = settings.SortingTactsPerFrame.ToString();
-        maxFps.text = settings.MaxFps.ToString();
+        delay.text = settings.Delay.ToString();
+
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 300;
     }
 
     public void Dropdown_SetSortingType(int enumId) 
@@ -56,15 +58,15 @@ public class SettingsView : MonoBehaviour
         Input_TactsPerFrame(settings.SortingTactsPerFrame.ToString());
     }
 
-    public void Input_MaxFps(string value) 
+    public void Input_Delay(string value) 
     {
         int tmp;
         if (string.IsNullOrEmpty(value))
             tmp = 0;
         else
             tmp = int.Parse(value);
-        settings.SetMaxFps(tmp);
-        maxFps.text = settings.MaxFps.ToString();
+        settings.SetDelay(tmp);
+        delay.text = settings.Delay.ToString();
     }
 
     public void Input_TactsPerFrame(string value) 

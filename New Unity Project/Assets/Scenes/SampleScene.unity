@@ -1928,7 +1928,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Max FPS
+  m_text: Delay
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1997,10 +1997,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 467837969}
-    characterCount: 7
+    characterCount: 5
     spriteCount: 0
-    spaceCount: 1
-    wordCount: 2
+    spaceCount: 0
+    wordCount: 1
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -4963,7 +4963,7 @@ GameObject:
   - component: {fileID: 1567252852}
   - component: {fileID: 1567252851}
   m_Layer: 5
-  m_Name: MaxFPS
+  m_Name: Delay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6395,7 +6395,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2035989019}
-        m_MethodName: Input_MaxFps
+        m_MethodName: Input_Delay
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7191,7 +7191,7 @@ MonoBehaviour:
   randomzierTypeDropDown: {fileID: 625249274}
   sortingController: {fileID: 1223275300}
   arraySizeText: {fileID: 17631018}
-  maxFps: {fileID: 1869870219}
+  delay: {fileID: 0}
   tactsPerFrame: {fileID: 188446421}
   arraySizeSlider: {fileID: 1412589349}
 --- !u!222 &2035989021

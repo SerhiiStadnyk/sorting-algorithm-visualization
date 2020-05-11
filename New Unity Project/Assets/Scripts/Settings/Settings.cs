@@ -28,27 +28,23 @@ public class Settings : ScriptableObject
 #pragma warning disable 0649
     [SerializeField] private SortingTypes sortingType;
     [SerializeField] private RandomizerTypes randomizerType;
-    [SerializeField] private int delay;
     [SerializeField] private int minArraySize;
 #pragma warning restore 0649
     public SortingTypes SortingType { get { return sortingType; } }
     public RandomizerTypes RandomizerType { get { return randomizerType; } }
-    public int Delay { get { return delay; } }
     public int ArraySize { get; private set; }
     public int MaxArraySize { get; private set; }
     public int MinArraySize { get { return minArraySize; } }
 
-    public int MaxFps { get; private set; } = 60;
+    public int Delay { get; private set; }
     public int SortingTactsPerFrame { get; private set; } = 1;
 
-    public void SetMaxFps(int value)
+    public void SetDelay(int value)
     {
-        if (value < 5)
-            MaxFps = 5;
+        if (value < 0)
+            Delay = 0;
         else
-            MaxFps = value;
-
-        Application.targetFrameRate = MaxFps;
+            Delay = value;
     }
 
     public void SetSortingTactsPerFrame(int value)
@@ -64,11 +60,6 @@ public class Settings : ScriptableObject
     public void SetSortingType(int id) 
     {
         sortingType = (SortingTypes)id;
-    }
-
-    public void SetDelay(int value)
-    {
-        delay = value;
     }
 
     public void SetRandomizerType(int id)
