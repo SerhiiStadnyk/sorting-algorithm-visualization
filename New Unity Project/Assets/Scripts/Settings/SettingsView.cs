@@ -61,10 +61,10 @@ public class SettingsView : MonoBehaviour
     public void Input_Delay(string value) 
     {
         int tmp;
-        if (string.IsNullOrEmpty(value))
+
+        if(int.TryParse(value, out tmp) == false)
             tmp = 0;
-        else
-            tmp = int.Parse(value);
+
         settings.SetDelay(tmp);
         delay.text = settings.Delay.ToString();
     }
@@ -72,10 +72,9 @@ public class SettingsView : MonoBehaviour
     public void Input_TactsPerFrame(string value) 
     {
         int tmp;
-        if (string.IsNullOrEmpty(value))
+
+        if (int.TryParse(value, out tmp) == false)
             tmp = 0;
-        else
-            tmp = int.Parse(value);
         settings.SetSortingTactsPerFrame(tmp);
         tactsPerFrame.text = settings.SortingTactsPerFrame.ToString();
     }
