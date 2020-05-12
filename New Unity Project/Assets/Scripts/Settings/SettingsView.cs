@@ -54,6 +54,9 @@ public class SettingsView : MonoBehaviour
 
     public void Button_CreateArray() 
     {
+        if (sortingController.isSorting)
+            return;
+
         sortingController.CreateArray();
         Input_TactsPerFrame(settings.SortingTactsPerFrame.ToString());
     }

@@ -17,6 +17,8 @@ public class SortingController : MonoBehaviour, ISortingHandable
     private Coroutine sortingCoroutine;
     private Coroutine checkingCoroutine;
 
+    public bool isSorting;
+
     public List<int> Array { get => dataArray.Array; set => dataArray.Array = value; }
 
     private void Awake()
@@ -42,8 +44,12 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
     public void StartSorting()
     {
+        if (isSorting)
+            return;
+
         if (dataArray.Array == null || dataArray.Array.Count == 0)
             return;
+        isSorting = true;
 
         CleanUp();
         sortingAlgorithm = SortingAlgorithmCreator.GetAlgorithm(this, settings.SortingType);
@@ -68,6 +74,9 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
     public void Button_CheckData()
     {
+        if (isSorting)
+            return;
+
         CleanUp();
         if (checkingCoroutine != null)
             StopCoroutine(checkingCoroutine);
@@ -113,6 +122,8 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
             yield return new WaitForSeconds(settings.Delay / 1000f);
         }
+
+        isSorting = false;
     }
 
     public void MarkElements(params int[] markedElements)
