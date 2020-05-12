@@ -1,7 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 [RequireComponent(typeof(ArrayVisualizerController))]
@@ -29,7 +27,9 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
     private void Start()
     {
-        settings.SetMaximumArraySize(arrayVisualizer.CalculateMaxArrayNumber());
+        arrayVisualizer.Init(VisualizerTypes.Column, dataArray);
+
+        settings.SetMaximumArraySize(arrayVisualizer.CalculateMaxArraySize());
         settingsView.arraySizeSlider.maxValue = settings.MaxArraySize;
         settingsView.arraySizeSlider.value = settings.ArraySize;
     }
@@ -37,7 +37,7 @@ public class SortingController : MonoBehaviour, ISortingHandable
     public void CreateArray()
     {
         dataArray.CreateArray(settings.ArraySize, settings.RandomizerType);
-        arrayVisualizer.Init(dataArray);
+        arrayVisualizer.Build();
     }
 
     public void StartSorting()
@@ -103,21 +103,13 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
     private IEnumerator CheckData() 
     {
-        bool isWrong = false;
         arrayVisualizer.RemoveMarks();
         for (int i = 0; i < dataArray.Array.Count; i++)
         {
-            if (i != 0)
-            {
-                if (dataArray.Array[i] < dataArray.Array[i - 1])
-                    isWrong = true;
-
-                arrayVisualizer.MarkForCheck(i, isWrong);
-            }
+            if (dataArray.Array[i] != i)
+                arrayVisualizer.MarkForCheck(i, true);
             else
-            {
-                arrayVisualizer.MarkForCheck(i, isWrong);
-            }
+                arrayVisualizer.MarkForCheck(i, false);
 
             yield return new WaitForSeconds(settings.Delay / 1000f);
         }

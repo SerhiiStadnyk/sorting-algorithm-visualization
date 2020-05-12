@@ -154,13 +154,15 @@ public class DataArray
     private List<int> CreateArrayPyramid(int arraySize)
     {
         var tmpList = new List<int>();
-        var tmpListSecond = new List<int>();
+        int offset = 0;
+        if (arraySize % 2 != 0)
+            offset = 1;
 
         for (int i = 0; i < arraySize; i+= 2)
         {
             tmpList.Add(i);
         }
-        for (int i = arraySize - 1; i > 0; i -= 2)
+        for (int i = arraySize - 1 - offset; i > 0; i -= 2)
         {
             tmpList.Add(i);
         }
@@ -171,9 +173,11 @@ public class DataArray
     private List<int> CreateArrayPyramidReverse(int arraySize)
     {
         var tmpList = new List<int>();
-        var tmpListSecond = new List<int>();
+        int offset = 0;
+        if (arraySize % 2 != 0)
+            offset = 1;
 
-        for (int i = arraySize - 1; i > 0; i -= 2)
+        for (int i = arraySize - 1 - offset; i > 0; i -= 2)
         {
             tmpList.Add(i);
         }

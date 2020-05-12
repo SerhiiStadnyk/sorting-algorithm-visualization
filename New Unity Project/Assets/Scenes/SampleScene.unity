@@ -4288,12 +4288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   containerRect: {fileID: 985104107}
-  imagePrefab: {fileID: 4928169041303207766, guid: 836d9e9dfc1546d4dbe5cdd20acab05f,
-    type: 3}
-  minElementWidth: 3
-  maxElementWidth: 25
-  padding: 0
-  dynamicWidth: 1
+  visualizersList: {fileID: 11400000, guid: 87ab006dfdf90ed4f942f2050ce17aa3, type: 2}
 --- !u!1 &1241450109
 GameObject:
   m_ObjectHideFlags: 0
@@ -7191,7 +7186,7 @@ MonoBehaviour:
   randomzierTypeDropDown: {fileID: 625249274}
   sortingController: {fileID: 1223275300}
   arraySizeText: {fileID: 17631018}
-  delay: {fileID: 0}
+  delay: {fileID: 1869870219}
   tactsPerFrame: {fileID: 188446421}
   arraySizeSlider: {fileID: 1412589349}
 --- !u!222 &2035989021
