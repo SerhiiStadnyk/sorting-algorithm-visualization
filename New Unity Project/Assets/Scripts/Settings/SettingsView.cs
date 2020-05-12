@@ -31,9 +31,6 @@ public class SettingsView : MonoBehaviour
 
         tactsPerFrame.text = settings.SortingTactsPerFrame.ToString();
         delay.text = settings.Delay.ToString();
-
-        QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 300;
     }
 
     public void Dropdown_SetSortingType(int enumId) 
