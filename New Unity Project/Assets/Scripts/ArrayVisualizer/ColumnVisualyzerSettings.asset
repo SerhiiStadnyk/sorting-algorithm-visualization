@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2578ff198d65b2d4d9c22f1b62bda46b, type: 3}
   m_Name: ColumnVisualyzerSettings
   m_EditorClassIdentifier: 
-  minElementWidth: 3
+  minElementWidth: 1
   maxElementWidth: 25
   padding: 5
-  dynamicWidth: 0
+  dynamicWidth: 1

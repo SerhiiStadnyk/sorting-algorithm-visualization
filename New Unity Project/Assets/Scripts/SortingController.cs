@@ -12,10 +12,12 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
     private SortingAlgorithmBase sortingAlgorithm;
     private ArrayVisualizerController arrayVisualizer;
-    private DataArray dataArray;
+    [SerializeField] private DataArray dataArray;
 
     private Coroutine sortingCoroutine;
     private Coroutine checkingCoroutine;
+
+    private List<int> tmpArray;
 
     public bool isSorting;
 
@@ -50,6 +52,7 @@ public class SortingController : MonoBehaviour, ISortingHandable
         if (dataArray.Array == null || dataArray.Array.Count == 0)
             return;
         isSorting = true;
+        tmpArray = new List<int>(dataArray.Array);
 
         CleanUp();
         sortingAlgorithm = SortingAlgorithmCreator.GetAlgorithm(this, settings.SortingType);
@@ -60,6 +63,7 @@ public class SortingController : MonoBehaviour, ISortingHandable
             StopCoroutine(sortingCoroutine);
         sortingCoroutine = StartCoroutine(StateSorting());
     }
+
     private void CleanUp()
     {
         sortingAlgorithm = null;
@@ -81,6 +85,24 @@ public class SortingController : MonoBehaviour, ISortingHandable
         if (checkingCoroutine != null)
             StopCoroutine(checkingCoroutine);
         checkingCoroutine = StartCoroutine(CheckData());
+    }
+
+    public void ButtonReset() 
+    {
+        if (!isSorting)
+            return;
+
+        isSorting = false;
+
+        if (checkingCoroutine != null)
+            StopCoroutine(checkingCoroutine);
+        if (sortingCoroutine != null)
+            StopCoroutine(sortingCoroutine);
+
+        dataArray.Array = tmpArray;
+        CleanUp();
+
+        arrayVisualizer.Build();
     }
 
     public void FinishSorting()
