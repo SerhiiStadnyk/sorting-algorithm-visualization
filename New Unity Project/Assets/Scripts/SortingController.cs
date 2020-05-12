@@ -121,6 +121,9 @@ public class SortingController : MonoBehaviour, ISortingHandable
         {
             if (counter >= settings.SortingTactsPerFrame)
             {
+                if(!isSorting)
+                    yield break;
+
                 counter = 1;
                 arrayVisualizer.MarkElements();
                 yield return new WaitForSeconds(settings.Delay / 1000f);
