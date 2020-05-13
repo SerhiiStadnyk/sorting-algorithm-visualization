@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 [RequireComponent(typeof(ArrayVisualizerController))]
 public class SortingController : MonoBehaviour, ISortingHandable
@@ -8,11 +9,15 @@ public class SortingController : MonoBehaviour, ISortingHandable
 #pragma warning disable 0649
     [SerializeField] private Settings settings;
     [SerializeField] private SettingsView settingsView;
+    [SerializeField] private DataArray dataArray;
+
+    [SerializeField] private TMP_Text arrayAccesInfo;
+    [SerializeField] private TMP_Text comparesInfo;
+    [SerializeField] private TMP_Text timeInfo;
 #pragma warning restore 0649
 
     private SortingAlgorithmBase sortingAlgorithm;
     private ArrayVisualizerController arrayVisualizer;
-    [SerializeField] private DataArray dataArray;
 
     private Coroutine sortingCoroutine;
     private Coroutine checkingCoroutine;
@@ -68,10 +73,23 @@ public class SortingController : MonoBehaviour, ISortingHandable
     {
         sortingAlgorithm = null;
         arrayVisualizer.RemoveMarks();
+
+        arrayAccesInfo.text = "0";
+        comparesInfo.text = "0";
+        timeInfo.text = "0";
+    }
+
+    private void TextAddValue(TMP_Text text, float value = 1) 
+    {
+        float tmp = float.Parse(text.text);
+        tmp += value;
+        text.text = (tmp+ value).ToString();
     }
 
     public void RelocateElements(int fromIndex, int toIndex)
     {
+        TextAddValue(arrayAccesInfo);
+
         arrayVisualizer.UpdateElement(fromIndex);
         arrayVisualizer.UpdateElement(toIndex);
     }
@@ -117,16 +135,18 @@ public class SortingController : MonoBehaviour, ISortingHandable
     int counter = 1;
     private IEnumerator StateSorting()
     {
+        float time = Time.time;
         foreach (int i in sortingAlgorithm.Sort()) 
         {
             if (counter >= settings.SortingTactsPerFrame)
             {
-                if(!isSorting)
+                if (!isSorting)
                     yield break;
 
                 counter = 1;
                 arrayVisualizer.MarkElements();
                 yield return new WaitForSeconds(settings.Delay / 1000f);
+                timeInfo.text = (Time.time - time).ToString();
             }
             else 
             {
@@ -153,6 +173,7 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
     public void MarkElements(params int[] markedElements)
     {
+        TextAddValue(comparesInfo, markedElements.Length);
         arrayVisualizer.AddMarks(markedElements);
     }
 }

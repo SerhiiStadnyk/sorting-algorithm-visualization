@@ -200,7 +200,6 @@ class ColumnVisualizer : VisualizerBase
     {
         float containerWidth = containerRect.rect.width;
         float result = containerWidth / 40;
-        Debug.Log(result);
         return result;
     }
 
