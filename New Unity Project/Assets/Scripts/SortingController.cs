@@ -107,9 +107,6 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
     public void ButtonReset() 
     {
-        if (!isSorting)
-            return;
-
         isSorting = false;
 
         if (checkingCoroutine != null)
