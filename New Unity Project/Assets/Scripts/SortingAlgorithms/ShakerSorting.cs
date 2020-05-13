@@ -7,23 +7,6 @@ public class ShakerSorting : SortingAlgorithmBase
 
     public ShakerSorting(ISortingHandable handleable) : base(handleable) { }
 
-
-    public void MarkElements(params int[] markedElements)
-    {
-        Handleable.MarkElements(markedElements);
-    }
-
-    public void RelocateElements(int fromIndex, int toIndex)
-    {
-
-        Handleable.RelocateElements(fromIndex, toIndex);
-    }
-
-    public void FinishSorting()
-    {
-        Handleable.FinishSorting();
-    }
-
     public override IEnumerable<int> Sort()
     {
         bool switcher = true;
@@ -45,7 +28,7 @@ public class ShakerSorting : SortingAlgorithmBase
                         isSorted = false;
                     }
                     switcher = false;
-                    MarkElements(a, a + 1);
+                    CompareElements(a, a + 1);
                     yield return i;
                 }
                 left++;
@@ -63,7 +46,7 @@ public class ShakerSorting : SortingAlgorithmBase
                         isSorted = false;
                     }
                     switcher = true;
-                    MarkElements(a, a - 1);
+                    CompareElements(a, a - 1);
                     yield return i;
                 }
                 rigth++;

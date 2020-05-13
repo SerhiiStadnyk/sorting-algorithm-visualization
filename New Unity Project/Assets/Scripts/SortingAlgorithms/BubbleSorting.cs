@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 public class BubbleSorting : SortingAlgorithmBase
 {
-    public override ISortingHandable Handleable { get; set; }
-
     public BubbleSorting(ISortingHandable handleable) : base(handleable) { }
 
     public override IEnumerable<int> Sort() 
@@ -22,7 +19,7 @@ public class BubbleSorting : SortingAlgorithmBase
                     RelocateElements(a, a + 1);
                     isSorted = false;
                 }
-                MarkElements(a, a + 1);
+                CompareElements(a, a + 1);
                 yield return i;
             }
 
@@ -33,20 +30,5 @@ public class BubbleSorting : SortingAlgorithmBase
             }
         }
         FinishSorting();
-    }
-
-    public void MarkElements(params int[] markedElements) 
-    {
-        Handleable.MarkElements(markedElements);
-    }
-
-    public void RelocateElements(int fromIndex, int toIndex)
-    {
-        Handleable.RelocateElements(fromIndex, toIndex);
-    }
-
-    public void FinishSorting()
-    {
-        Handleable.FinishSorting();
     }
 }
