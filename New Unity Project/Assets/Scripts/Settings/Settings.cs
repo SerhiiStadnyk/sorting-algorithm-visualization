@@ -4,7 +4,7 @@ public enum SortingTypes
 {
     Bubble,
     Shaker,
-    QuickSort
+    Insertion
 };
 
 public enum RandomizerTypes

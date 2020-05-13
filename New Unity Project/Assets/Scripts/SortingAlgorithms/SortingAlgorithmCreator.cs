@@ -18,7 +18,8 @@ public static class SortingAlgorithmCreator
             case SortingTypes.Shaker:
                 result = SortingAlgorithmCreator.CreateShakerSorting(handleable);
                 break;
-            case SortingTypes.QuickSort:
+            case SortingTypes.Insertion:
+                result = SortingAlgorithmCreator.CreateInsertionSorting(handleable);
                 break;
         }
         return result;
@@ -32,5 +33,10 @@ public static class SortingAlgorithmCreator
     private static SortingAlgorithmBase CreateShakerSorting(ISortingHandable handleable)
     {
         return new ShakerSorting(handleable);
+    }
+
+    private static SortingAlgorithmBase CreateInsertionSorting(ISortingHandable handleable)
+    {
+        return new InsertionSorting(handleable);
     }
 }
