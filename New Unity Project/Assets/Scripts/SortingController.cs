@@ -132,7 +132,7 @@ public class SortingController : MonoBehaviour, ISortingHandable
     int counter = 1;
     private IEnumerator StateSorting()
     {
-        float time = Time.time;
+        float time = Time.unscaledTime;
         foreach (int i in sortingAlgorithm.Sort()) 
         {
             if (counter >= settings.SortingTactsPerFrame)
@@ -143,7 +143,7 @@ public class SortingController : MonoBehaviour, ISortingHandable
                 counter = 1;
                 arrayVisualizer.MarkElements();
                 yield return new WaitForSeconds(settings.Delay / 1000f);
-                timeInfo.text = (Time.time - time).ToString();
+                timeInfo.text = (Time.unscaledTime - time).ToString();
             }
             else 
             {

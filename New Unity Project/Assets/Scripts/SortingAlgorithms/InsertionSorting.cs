@@ -18,8 +18,6 @@ public class InsertionSorting : SortingAlgorithmBase
 
             for (int a = i; a > 0; a--)
             {
-                //if (a == i && i != 0)
-                //    continue;
                 int b = a - 1;
                 CompareElements(i, b);
                 yield return a;
@@ -35,7 +33,6 @@ public class InsertionSorting : SortingAlgorithmBase
                 }
 
             }
-            //yield return i;
         }
 
         FinishSorting();

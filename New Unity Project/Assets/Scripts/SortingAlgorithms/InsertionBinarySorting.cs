@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class InsertionBinarySorting : SortingAlgorithmBase
 {
-    private int binaryMark;
     int min;
     int max;
 
@@ -14,14 +13,11 @@ public class InsertionBinarySorting : SortingAlgorithmBase
         for (int i = 1; i < Array.Count; i++)
         {
             if (Array[i] >= Array[i - 1])
-                continue;
-
-            if (Array[i] == 0) 
             {
-                ShiftArray(0, i, Array);
+                CompareElements(i);
+                yield return i;
+                continue;
             }
-
-            binaryMark = i / 2;
 
             min = 0;
             max = i;
@@ -33,18 +29,14 @@ public class InsertionBinarySorting : SortingAlgorithmBase
                 CompareElements(i, mid);
                 yield return i;
 
-                if (mid == Array.Count - 1) 
+                if (mid == 0 && key <= Array[mid])
                 {
                     ShiftArray(mid, i, Array);
-                    //yield return i;
                     break;
                 }
-
-                Debug.Log(mid);
                 if (key <= Array[mid + 1] && key >= Array[mid])
                 {
                     ShiftArray(++mid, i, Array);
-                    //yield return i;
                     break;
                 }
                 else if (key < Array[mid])
@@ -55,26 +47,7 @@ public class InsertionBinarySorting : SortingAlgorithmBase
                 {
                     min = mid + 1;
                 }
-
-                //CompareElements(i, binaryMark - 1, binaryMark + 1);
-                //if (Array[i] <= Array[binaryMark + 1] && Array[i] >= Array[binaryMark - 1])
-                //{
-                //    ShiftArray(binaryMark, i, Array);
-                //    yield return i;
-                //    break;
-                //}
-                //else if (Array[i] < Array[binaryMark - 1] && Array[i] < Array[binaryMark + 1]) 
-                //{
-                //    binaryMark -= binaryMark / 2;
-                //}
-                //else if (Array[i] > Array[binaryMark - 1] && Array[i] > Array[binaryMark + 1])
-                //{
-                //    binaryMark += binaryMark / 2;
-                //}
-
-                yield return i;
             }
-            yield return i;
         }
 
         FinishSorting();
