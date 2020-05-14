@@ -8,13 +8,14 @@ public class ArrayVisualizerController : MonoBehaviour
 #pragma warning disable 0649
     [SerializeField] private RectTransform containerRect;
     [SerializeField] private VisualizersList visualizersList;
+    [SerializeField] private Settings settings;
 #pragma warning restore 0649
 
     private VisualizerBase visualizerBase;
 
     public void Init(VisualizerTypes visualizerType, DataArray dataArray) 
     {
-        visualizerBase = visualizersList.GetVisualizator(visualizerType, dataArray, containerRect);
+        visualizerBase = visualizersList.GetVisualizator(visualizerType, dataArray, containerRect, settings);
     }
 
     public void Build() 

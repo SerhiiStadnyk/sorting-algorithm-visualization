@@ -9,6 +9,7 @@ public class InsertionSorting : SortingAlgorithmBase
     {
         for (int i = 1; i < Array.Count; i++)
         {
+            CompareElements(i, i - 1);
             if (Array[i] >= Array[i - 1])
                 continue;
 

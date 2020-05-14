@@ -10,17 +10,16 @@ class ColumnVisualizer : VisualizerBase
     private bool dynamicWidth;
 
     private List<Image> elementsList = new List<Image>();
-    private List<Image> markedElements = new List<Image>();
-    private List<int> marksList = new List<int>();
 
     private float elementWidth;
     private ColumnVisualyzerSettings columnSettings;
 
-    public ColumnVisualizer(ColumnVisualyzerSettings columnSettings, DataArray dataArray, RectTransform containerRect)
+    public ColumnVisualizer(ColumnVisualyzerSettings columnSettings, DataArray dataArray, RectTransform containerRect, Settings settings)
     {
         this.columnSettings = columnSettings;
         this.dataArray = dataArray;
         this.containerRect = containerRect;
+        this.settings = settings;
         UpdateSettings();
     }
 
@@ -30,6 +29,19 @@ class ColumnVisualizer : VisualizerBase
         maxElementWidth = columnSettings.maxElementWidth;
         padding = columnSettings.padding;
         dynamicWidth = columnSettings.dynamicWidth;
+
+        switch (settings.SortingType)
+        {
+            case SortingTypes.Insertion:
+                visualizationColoring = new VisualizerColoringComparer(elementsList);
+                break;
+            case SortingTypes.InsertionBinary:
+                visualizationColoring = new VisualizerColoringComparer(elementsList);
+                break;
+            default:
+                visualizationColoring = new VisualizerColoringStandart(elementsList);
+                break;
+        }
     }
 
     public override void Build()
@@ -92,42 +104,6 @@ class ColumnVisualizer : VisualizerBase
         image.transform.SetParent(containerRect);
         image.transform.localScale = Vector3.one;
         elementsList.Add(image);
-    }
-
-    public override void RemoveMarks()
-    {
-        elementsList.ForEach(image => image.color = Color.white);
-    }
-    public override void MarkElements()
-    {
-        if (markedElements.Count > 0)
-        {
-            markedElements.ForEach(image => image.color = Color.white);
-            markedElements.Clear();
-        }
-
-        for (int i = 0; i < marksList.Count; i++)
-        {
-            markedElements.Add(elementsList[marksList[i]]);
-            elementsList[marksList[i]].color = Color.red;
-        }
-
-        marksList.Clear();
-    }
-    public override void AddMarks(params int[] indexArray)
-    {
-        for (int i = 0; i < indexArray.Length; i++)
-        {
-            marksList.Add(indexArray[i]);
-        }
-    }
-
-    public override void MarkForCheck(int index, bool isWrong)
-    {
-        if (isWrong)
-            elementsList[index].color = Color.red;
-        else
-            elementsList[index].color = Color.green;
     }
 
     public float GetElementWidth()

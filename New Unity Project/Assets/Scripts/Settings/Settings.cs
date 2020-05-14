@@ -4,7 +4,8 @@ public enum SortingTypes
 {
     Bubble,
     Shaker,
-    Insertion
+    Insertion,
+    InsertionBinary
 };
 
 public enum RandomizerTypes

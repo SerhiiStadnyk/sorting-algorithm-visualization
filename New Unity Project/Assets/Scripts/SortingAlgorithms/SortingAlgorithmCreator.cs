@@ -21,6 +21,9 @@ public static class SortingAlgorithmCreator
             case SortingTypes.Insertion:
                 result = SortingAlgorithmCreator.CreateInsertionSorting(handleable);
                 break;
+            case SortingTypes.InsertionBinary:
+                result = SortingAlgorithmCreator.CreateInsertionBinarySorting(handleable);
+                break;
         }
         return result;
     }
@@ -38,5 +41,10 @@ public static class SortingAlgorithmCreator
     private static SortingAlgorithmBase CreateInsertionSorting(ISortingHandable handleable)
     {
         return new InsertionSorting(handleable);
+    }
+
+    private static SortingAlgorithmBase CreateInsertionBinarySorting(ISortingHandable handleable)
+    {
+        return new InsertionBinarySorting(handleable);
     }
 }
