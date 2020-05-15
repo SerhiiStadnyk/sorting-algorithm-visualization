@@ -10,46 +10,74 @@ public class ShakerSorting : SortingAlgorithmBase
     public override IEnumerable<int> Sort()
     {
         bool switcher = true;
-        int left = 0;
-        int rigth = 0;
-        for (int i = 0; i < Array.Count; i++)
+        int leftEnd = 0;
+        int leftStart = 0;
+        int rigthEnd = 0;
+        int rigthStart = 0;
+        int leftOffset = 0;
+        int leftOffsetStart = 0;
+        int rigthOffset = 0;
+        int rigthOffsetStart = 0;
+
+        int tmpOffset = 0;
+        int tmpOffsetStart = 0;
+
+        for (int i = 0; i < Array.Count;)
         {
+            tmpOffset = 0;
+            tmpOffsetStart = 0;
+
             bool isSorted = true;
             if (switcher)
             {
-                for (int a = rigth; a < Array.Count - rigth - 1; a++)
+                leftEnd = Array.Count - i - 1 - leftOffset;
+                leftStart = leftOffsetStart;
+                for (int a = leftStart; a < leftEnd; a++)
                 {
+                    tmpOffset++;
                     if (Array[a] > Array[a + 1])
                     {
                         int tmp = Array[a];
                         Array[a] = Array[a + 1];
                         Array[a + 1] = tmp;
                         RelocateElements(a, a + 1);
+                        tmpOffset = 0;
                         isSorted = false;
                     }
-                    switcher = false;
+                    if (isSorted)
+                        tmpOffsetStart++;
                     CompareElements(a, a + 1);
                     yield return i;
                 }
-                left++;
+                leftOffset += tmpOffset;
+                leftOffsetStart += tmpOffsetStart;
+                switcher = false;
+                i++;
             }
             else 
             {
-                for (int a = Array.Count - left - 1; a >= left; a--)
+                rigthEnd = i + rigthOffset;
+                rigthStart = Array.Count - 1 - rigthOffsetStart;
+                for (int a = rigthStart; a >= rigthEnd; a--)
                 {
+                    tmpOffset++;
                     if (Array[a] < Array[a - 1])
                     {
                         int tmp = Array[a];
                         Array[a] = Array[a - 1];
                         Array[a - 1] = tmp;
                         RelocateElements(a, a - 1);
+                        tmpOffset = 0;
                         isSorted = false;
                     }
-                    switcher = true;
+                    if (isSorted)
+                        tmpOffsetStart++;
                     CompareElements(a, a - 1);
                     yield return i;
                 }
-                rigth++;
+                rigthOffset += tmpOffset;
+                rigthOffsetStart += tmpOffsetStart;
+                switcher = true;
             }
             if (isSorted)
             {

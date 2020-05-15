@@ -5440,6 +5440,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   containerRect: {fileID: 985104107}
   visualizersList: {fileID: 11400000, guid: 87ab006dfdf90ed4f942f2050ce17aa3, type: 2}
+  settings: {fileID: 11400000, guid: 28d97b497f246a74fb7a2097a46f5ce6, type: 2}
 --- !u!1 &1241450109
 GameObject:
   m_ObjectHideFlags: 0
