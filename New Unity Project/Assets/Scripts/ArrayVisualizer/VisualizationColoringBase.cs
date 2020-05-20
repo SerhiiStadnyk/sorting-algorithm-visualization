@@ -5,7 +5,7 @@ public abstract class VisualizationColoringBase
 {
     protected List<Image> elementsList = new List<Image>();
     protected List<Image> markedElements = new List<Image>();
-    protected List<int> marksList = new List<int>();
+    protected List<ElementColor> marksList = new List<ElementColor>();
 
     public VisualizationColoringBase(List<Image> elementsList)
     {
@@ -19,7 +19,7 @@ public abstract class VisualizationColoringBase
     {
     }
 
-    public virtual void AddMarks(params int[] indexArray)
+    public virtual void AddMarks(params ElementColor[] indexArray)
     {
     }
 

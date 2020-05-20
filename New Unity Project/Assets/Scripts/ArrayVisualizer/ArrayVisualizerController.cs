@@ -36,7 +36,7 @@ public class ArrayVisualizerController : MonoBehaviour
     {
         visualizerBase.MarkElements();
     }
-    public void AddMarks(params int[] indexArray) 
+    public void AddMarks(params ElementColor[] indexArray) 
     {
         visualizerBase.AddMarks(indexArray);
     }

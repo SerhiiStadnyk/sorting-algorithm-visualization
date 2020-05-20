@@ -32,12 +32,6 @@ class ColumnVisualizer : VisualizerBase
 
         switch (settings.SortingType)
         {
-            case SortingTypes.Insertion:
-                visualizationColoring = new VisualizerColoringComparer(elementsList);
-                break;
-            case SortingTypes.InsertionBinary:
-                visualizationColoring = new VisualizerColoringComparer(elementsList);
-                break;
             default:
                 visualizationColoring = new VisualizerColoringStandart(elementsList);
                 break;

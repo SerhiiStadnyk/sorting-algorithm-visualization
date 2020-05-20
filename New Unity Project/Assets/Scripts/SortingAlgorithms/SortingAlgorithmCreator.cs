@@ -24,6 +24,9 @@ public static class SortingAlgorithmCreator
             case SortingTypes.InsertionBinary:
                 result = SortingAlgorithmCreator.CreateInsertionBinarySorting(handleable);
                 break;
+            case SortingTypes.QuickSort:
+                result = SortingAlgorithmCreator.CreateQuickSort(handleable);
+                break;
         }
         return result;
     }
@@ -46,5 +49,10 @@ public static class SortingAlgorithmCreator
     private static SortingAlgorithmBase CreateInsertionBinarySorting(ISortingHandable handleable)
     {
         return new InsertionBinarySorting(handleable);
+    }
+
+    private static SortingAlgorithmBase CreateQuickSort(ISortingHandable handleable)
+    {
+        return new QuickSorting(handleable);
     }
 }

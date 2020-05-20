@@ -23,17 +23,17 @@ public class VisualizerColoringStandart: VisualizationColoringBase
 
         for (int i = 0; i < marksList.Count; i++)
         {
-            markedElements.Add(elementsList[marksList[i]]);
-            elementsList[marksList[i]].color = Color.red;
+            markedElements.Add(elementsList[marksList[i].elementInxe]);
+            elementsList[marksList[i].elementInxe].color = marksList[i].elementColor;
 
             if (i == 0)
-                elementsList[marksList[i]].color = Color.red;
+                elementsList[marksList[i].elementInxe].color = marksList[i].elementColor;
         }
 
         marksList.Clear();
     }
 
-    public override void AddMarks(params int[] indexArray)
+    public override void AddMarks(params ElementColor[] indexArray)
     {
         for (int i = 0; i < indexArray.Length; i++)
         {

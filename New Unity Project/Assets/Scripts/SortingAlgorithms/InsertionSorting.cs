@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class InsertionSorting : SortingAlgorithmBase
 {
@@ -9,7 +10,9 @@ public class InsertionSorting : SortingAlgorithmBase
         {
             if (Array[i] >= Array[i - 1])
             {
-                CompareElements(i, i - 1);
+                CompareElements(
+                    ElementColor.Build(i, Color.green),
+                    ElementColor.Build(i-1, Color.red));
                 yield return i;
                 continue;
             }
@@ -17,7 +20,9 @@ public class InsertionSorting : SortingAlgorithmBase
             for (int a = i; a > 0; a--)
             {
                 int b = a - 1;
-                CompareElements(i, b);
+                CompareElements(
+                    ElementColor.Build(i, Color.green),
+                    ElementColor.Build(b, Color.red));
                 yield return a;
                 if (Array[i] >= Array[b])
                 {

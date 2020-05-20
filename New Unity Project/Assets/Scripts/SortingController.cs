@@ -168,7 +168,7 @@ public class SortingController : MonoBehaviour, ISortingHandable
         isSorting = false;
     }
 
-    public void MarkElements(params int[] markedElements)
+    public void MarkElements(params ElementColor[] markedElements)
     {
         TextAddValue(comparesInfo, markedElements.Length);
         arrayVisualizer.AddMarks(markedElements);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class BubbleSorting : SortingAlgorithmBase
 {
@@ -19,7 +20,9 @@ public class BubbleSorting : SortingAlgorithmBase
                     RelocateElements(a, a + 1);
                     isSorted = false;
                 }
-                CompareElements(a, a + 1);
+                CompareElements(
+                    ElementColor.Build(a, Color.red),
+                    ElementColor.Build(a+1, Color.red));
                 yield return i;
             }
 

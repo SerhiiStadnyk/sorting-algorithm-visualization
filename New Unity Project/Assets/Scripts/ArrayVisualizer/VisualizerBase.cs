@@ -20,7 +20,7 @@ abstract public class VisualizerBase
         visualizationColoring.MarkElements();
     }
 
-    public virtual void AddMarks(params int[] indexArray)
+    public virtual void AddMarks(params ElementColor[] indexArray)
     {
         visualizationColoring.AddMarks(indexArray);
     }

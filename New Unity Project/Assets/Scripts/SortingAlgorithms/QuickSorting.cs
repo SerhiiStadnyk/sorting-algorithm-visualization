@@ -1,0 +1,118 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class QuickSorting : SortingAlgorithmBase
+{
+    public QuickSorting(ISortingHandable sortingHandable): base(sortingHandable)
+    {
+    }
+    public override IEnumerable<int> Sort()
+    {
+        int startPoint = 0;
+        int endPoint = Array.Count - 1;
+        int median = -1;
+        List<int> pivotList = new List<int>();
+
+        do
+        {
+            foreach (int i in SortChunk(startPoint, endPoint)) 
+            {
+                yield return 0;
+                pivotList.Add(startPoint);
+            }
+
+            if (endPoint <= startPoint || median == 0)
+            {
+                pivotList.RemoveAt(pivotList.Count - 1);
+                startPoint = endPoint + 1;
+                endPoint = pivotList[pivotList.Count - 1];
+
+                Debug.Log("=======================");
+                Debug.Log("Start Point" + startPoint);
+                Debug.Log("End Point" + endPoint);
+            }
+            else 
+            {
+                median = (endPoint - startPoint) / 2;
+                endPoint -= median;
+            }
+
+            yield return 0;
+        } while (endPoint < Array.Count);
+
+        FinishSorting();
+    }
+
+    private IEnumerable<int> SortChunk(int startIndex, int endIndex) 
+    {
+        int median = GetMedianSimple(startIndex, endIndex);
+        int rightOffset = 0;
+
+        for (int i = startIndex; i < endIndex - rightOffset; i++)
+        {
+            CompareElements(ElementColor.Build(i, Color.green));
+            if (Array[i] >= median)
+            {
+                for (int a = endIndex - rightOffset; a > i; a--)
+                {
+                    rightOffset++;
+                    CompareElements(
+                        ElementColor.Build(i, Color.green),
+                        ElementColor.Build(a, Color.red));
+                    if (Array[a] < median)
+                    {
+                        SwapElements(i, a);
+                        yield return a;
+                        break;
+                    }
+
+                    yield return a;
+                }
+            }
+
+            yield return i;
+        }
+    }
+
+    private void SwapElements(int fromIndex, int toIndex) 
+    {
+        int tmp = Array[fromIndex];
+        Array[fromIndex] = Array[toIndex];
+        Array[toIndex] = tmp;
+
+        RelocateElements(fromIndex, toIndex);
+    }
+
+    private int GetMedian(int arrayCount) 
+    {
+        List<int> medianList = new List<int>();
+
+        if (arrayCount >= 9) 
+        {
+            for (int i = 0; i < arrayCount; i++)
+            {
+                medianList.Add(i);
+
+                if (i >= 2 && i < arrayCount / 2 - 1)
+                    i = arrayCount / 2 - 1;
+                else if (i >= arrayCount / 2 + 1 && i < arrayCount - 4)
+                    i = arrayCount - 4;
+            }
+        }
+
+        int sum = 0;
+        medianList.ForEach(value => sum += value);
+        if(medianList.Count > 0)
+            sum = sum / medianList.Count;
+
+        Debug.Log(sum);
+
+        return sum;
+    }
+
+    private int GetMedianSimple(int startIndex, int endIndex) 
+    {
+        return endIndex - (endIndex - startIndex) / 2;
+    }
+}

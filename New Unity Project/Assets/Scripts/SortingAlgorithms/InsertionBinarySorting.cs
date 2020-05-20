@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class InsertionBinarySorting : SortingAlgorithmBase
 {
@@ -12,7 +13,7 @@ public class InsertionBinarySorting : SortingAlgorithmBase
         {
             if (Array[i] >= Array[i - 1])
             {
-                CompareElements(i);
+                CompareElements(ElementColor.Build(i, Color.green));
                 yield return i;
                 continue;
             }
@@ -24,7 +25,9 @@ public class InsertionBinarySorting : SortingAlgorithmBase
             {
                 int key = Array[i];
                 int mid = (min + max) / 2;
-                CompareElements(i, mid);
+                CompareElements(
+                    ElementColor.Build(i, Color.green),
+                    ElementColor.Build(mid, Color.red));
                 yield return i;
 
                 if (mid == 0 && key <= Array[mid])

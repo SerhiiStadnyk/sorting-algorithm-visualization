@@ -7,27 +7,29 @@ public class ShakerSorting : SortingAlgorithmBase
 
     public ShakerSorting(ISortingHandable handleable) : base(handleable) { }
 
+    private bool switcher = true;
+    private int leftEnd = 0;
+    private int leftStart = 0;
+    private int rigthEnd = 0;
+    private int rigthStart = 0;
+    private int leftOffset = 0;
+    private int leftOffsetStart = 0;
+    private int rigthOffset = 0;
+    private int rigthOffsetStart = 0;
+
+    private int tmpOffset = 0;
+    private int tmpOffsetStart = 0;
+
+    bool isSorted = true;
+
     public override IEnumerable<int> Sort()
     {
-        bool switcher = true;
-        int leftEnd = 0;
-        int leftStart = 0;
-        int rigthEnd = 0;
-        int rigthStart = 0;
-        int leftOffset = 0;
-        int leftOffsetStart = 0;
-        int rigthOffset = 0;
-        int rigthOffsetStart = 0;
-
-        int tmpOffset = 0;
-        int tmpOffsetStart = 0;
-
         for (int i = 0; i < Array.Count;)
         {
             tmpOffset = 0;
             tmpOffsetStart = 0;
+            isSorted = true;
 
-            bool isSorted = true;
             if (switcher)
             {
                 leftEnd = Array.Count - i - 1 - leftOffset;
@@ -46,7 +48,9 @@ public class ShakerSorting : SortingAlgorithmBase
                     }
                     if (isSorted)
                         tmpOffsetStart++;
-                    CompareElements(a, a + 1);
+                    CompareElements(
+                        ElementColor.Build(a, Color.red),
+                        ElementColor.Build(a+1, Color.red));
                     yield return i;
                 }
                 leftOffset += tmpOffset;
@@ -72,7 +76,9 @@ public class ShakerSorting : SortingAlgorithmBase
                     }
                     if (isSorted)
                         tmpOffsetStart++;
-                    CompareElements(a, a - 1);
+                    CompareElements(
+                        ElementColor.Build(a, Color.red),
+                        ElementColor.Build(a - 1, Color.red));
                     yield return i;
                 }
                 rigthOffset += tmpOffset;
