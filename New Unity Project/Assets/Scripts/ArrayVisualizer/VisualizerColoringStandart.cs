@@ -15,6 +15,9 @@ public class VisualizerColoringStandart: VisualizationColoringBase
     }
     public override void MarkElements()
     {
+        if (marksList.Count == 0)
+            return;
+
         if (markedElements.Count > 0)
         {
             markedElements.ForEach(image => image.color = Color.white);

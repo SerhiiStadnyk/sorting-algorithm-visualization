@@ -29,8 +29,8 @@ public class QuickSorting : SortingAlgorithmBase
                 endPoint = pivotList[pivotList.Count - 1];
 
                 Debug.Log("=======================");
-                Debug.Log("Start Point" + startPoint);
-                Debug.Log("End Point" + endPoint);
+                Debug.Log("Start Point " + startPoint);
+                Debug.Log("End Point " + endPoint);
             }
             else 
             {
@@ -51,6 +51,9 @@ public class QuickSorting : SortingAlgorithmBase
 
         for (int i = startIndex; i < endIndex - rightOffset; i++)
         {
+            CompareElements(ElementColor.Build(endIndex, Color.blue),
+                            ElementColor.Build(startIndex, Color.blue));
+
             CompareElements(ElementColor.Build(i, Color.green));
             if (Array[i] >= median)
             {
@@ -59,7 +62,9 @@ public class QuickSorting : SortingAlgorithmBase
                     rightOffset++;
                     CompareElements(
                         ElementColor.Build(i, Color.green),
-                        ElementColor.Build(a, Color.red));
+                        ElementColor.Build(a, Color.red),
+                        ElementColor.Build(endIndex, Color.blue),
+                        ElementColor.Build(startIndex, Color.blue));
                     if (Array[a] < median)
                     {
                         SwapElements(i, a);
