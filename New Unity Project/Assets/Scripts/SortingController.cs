@@ -60,6 +60,11 @@ public class SortingController : MonoBehaviour, ISortingHandable
         tmpArray = new List<int>(dataArray.Array);
 
         CleanUp();
+
+        arrayAccesInfo.text = "0";
+        comparesInfo.text = "0";
+        timeInfo.text = "0";
+
         sortingAlgorithm = SortingAlgorithmCreator.GetAlgorithm(this, settings.SortingType);
 
         if (checkingCoroutine != null)
@@ -73,10 +78,6 @@ public class SortingController : MonoBehaviour, ISortingHandable
     {
         sortingAlgorithm = null;
         arrayVisualizer.RemoveMarks();
-
-        arrayAccesInfo.text = "0";
-        comparesInfo.text = "0";
-        timeInfo.text = "0";
     }
 
     private void TextAddValue(TMP_Text text, float value = 1) 
