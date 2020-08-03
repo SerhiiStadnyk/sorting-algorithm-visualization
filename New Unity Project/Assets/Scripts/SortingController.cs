@@ -123,7 +123,8 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
     public void FinishSorting()
     {
-        StopCoroutine(sortingCoroutine);
+        if(sortingCoroutine != null)
+            StopCoroutine(sortingCoroutine);
 
         if (checkingCoroutine != null)
             StopCoroutine(checkingCoroutine);
@@ -133,7 +134,7 @@ public class SortingController : MonoBehaviour, ISortingHandable
     int counter = 1;
     private IEnumerator StateSorting()
     {
-        float time = Time.unscaledTime;
+        float time = Time.realtimeSinceStartup;
         foreach (int i in sortingAlgorithm.Sort()) 
         {
             if (counter >= settings.SortingTactsPerFrame)
@@ -143,18 +144,23 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
                 counter = 1;
                 arrayVisualizer.MarkElements();
-                yield return new WaitForSeconds(settings.Delay / 1000f);
-                timeInfo.text = (Time.unscaledTime - time).ToString();
+                if(!settings.FastSort)
+                    yield return new WaitForSeconds(settings.Delay / 1000f);
+                timeInfo.text = (Time.realtimeSinceStartup - time).ToString();
             }
             else 
             {
                 counter++;
             }
         }
+
+        if(!settings.FastSort)
+            timeInfo.text = (Time.realtimeSinceStartup - time).ToString();
     }
 
     private IEnumerator CheckData() 
     {
+        counter = 0;
         arrayVisualizer.RemoveMarks();
         for (int i = 0; i < dataArray.Array.Count; i++)
         {
@@ -163,15 +169,21 @@ public class SortingController : MonoBehaviour, ISortingHandable
             else
                 arrayVisualizer.MarkForCheck(i, false);
 
-            yield return new WaitForSeconds(settings.Delay / 1000f);
+            if (counter == Array.Count/60)
+            {
+                counter = 0;
+                yield return null;
+            }
+            counter++;
         }
 
         isSorting = false;
     }
 
-    public void MarkElements(params ElementColor[] markedElements)
+    public void MarkElements(bool count = false, params ElementColor[] markedElements)
     {
-        TextAddValue(comparesInfo, markedElements.Length);
+        if(count)
+            TextAddValue(comparesInfo, markedElements.Length);
         arrayVisualizer.AddMarks(markedElements);
     }
 }

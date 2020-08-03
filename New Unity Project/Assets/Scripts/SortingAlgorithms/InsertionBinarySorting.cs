@@ -13,10 +13,10 @@ public class InsertionBinarySorting : SortingAlgorithmBase
         {
             if (Array[i] >= Array[i - 1])
             {
-                CompareElements(ElementColor.Build(i, Color.green));
-                yield return i;
                 continue;
             }
+            CompareElements(true, ElementColor.Build(i, Color.green));
+            yield return i;
 
             min = 0;
             max = i;
@@ -25,7 +25,7 @@ public class InsertionBinarySorting : SortingAlgorithmBase
             {
                 int key = Array[i];
                 int mid = (min + max) / 2;
-                CompareElements(
+                CompareElements(true,
                     ElementColor.Build(i, Color.green),
                     ElementColor.Build(mid, Color.red));
                 yield return i;

@@ -7,90 +7,77 @@ public class ShakerSorting : SortingAlgorithmBase
 
     public ShakerSorting(ISortingHandable handleable) : base(handleable) { }
 
-    private bool switcher = true;
-    private int leftEnd = 0;
-    private int leftStart = 0;
-    private int rigthEnd = 0;
-    private int rigthStart = 0;
-    private int leftOffset = 0;
-    private int leftOffsetStart = 0;
-    private int rigthOffset = 0;
-    private int rigthOffsetStart = 0;
-
-    private int tmpOffset = 0;
-    private int tmpOffsetStart = 0;
-
-    bool isSorted = true;
+    private int leftCounter = 0;
+    private int rightCounter = 0;
+    bool wasSorted = false;
 
     public override IEnumerable<int> Sort()
     {
-        for (int i = 0; i < Array.Count;)
-        {
-            tmpOffset = 0;
-            tmpOffsetStart = 0;
-            isSorted = true;
+        bool flip = true;
 
-            if (switcher)
+        for (int i = 0; i < Array.Count - 1; i++)
+        {
+            if (flip) 
             {
-                leftEnd = Array.Count - i - 1 - leftOffset;
-                leftStart = leftOffsetStart;
-                for (int a = leftStart; a < leftEnd; a++)
-                {
-                    tmpOffset++;
-                    if (Array[a] > Array[a + 1])
-                    {
-                        int tmp = Array[a];
-                        Array[a] = Array[a + 1];
-                        Array[a + 1] = tmp;
-                        RelocateElements(a, a + 1);
-                        tmpOffset = 0;
-                        isSorted = false;
-                    }
-                    if (isSorted)
-                        tmpOffsetStart++;
-                    CompareElements(
-                        ElementColor.Build(a, Color.red),
-                        ElementColor.Build(a+1, Color.red));
-                    yield return i;
-                }
-                leftOffset += tmpOffset;
-                leftOffsetStart += tmpOffsetStart;
-                switcher = false;
-                i++;
+                foreach (var a in LeftSort())
+                    yield return 0;
+                flip = false;
             }
-            else 
+            else
             {
-                rigthEnd = i + rigthOffset;
-                rigthStart = Array.Count - 1 - rigthOffsetStart;
-                for (int a = rigthStart; a >= rigthEnd; a--)
-                {
-                    tmpOffset++;
-                    if (Array[a] < Array[a - 1])
-                    {
-                        int tmp = Array[a];
-                        Array[a] = Array[a - 1];
-                        Array[a - 1] = tmp;
-                        RelocateElements(a, a - 1);
-                        tmpOffset = 0;
-                        isSorted = false;
-                    }
-                    if (isSorted)
-                        tmpOffsetStart++;
-                    CompareElements(
-                        ElementColor.Build(a, Color.red),
-                        ElementColor.Build(a - 1, Color.red));
-                    yield return i;
-                }
-                rigthOffset += tmpOffset;
-                rigthOffsetStart += tmpOffsetStart;
-                switcher = true;
+                foreach (var a in RightSort())
+                    yield return 0;
+                flip = true;
             }
-            if (isSorted)
-            {
-                FinishSorting();
-                yield break;
-            }
+
+            if (!wasSorted)
+                break;
         }
+
         FinishSorting();
+    }
+
+    private IEnumerable<int> LeftSort()
+    {
+        wasSorted = false;
+        for (int i = 0 + rightCounter; i < Array.Count - 1 - leftCounter; i++)
+        {
+            if (Array[i] > Array[i + 1]) 
+            {
+                wasSorted = true;
+                int tmpVal = Array[i];
+                Array[i] = Array[i + 1];
+                Array[i + 1] = tmpVal;
+                RelocateElements(i + 1, i);
+
+            }
+            CompareElements(true,
+            ElementColor.Build(i, Color.red),
+            ElementColor.Build(i + 1, Color.red));
+            yield return i;
+        }
+
+        leftCounter++;
+    }
+    private IEnumerable<int> RightSort()
+    {
+        wasSorted = false;
+        for (int i = Array.Count - 1 - leftCounter; i > 0 + rightCounter; i--)
+        {
+            if (Array[i] < Array[i - 1])
+            {
+                wasSorted = true;
+                int tmpVal = Array[i];
+                Array[i] = Array[i - 1];
+                Array[i - 1] = tmpVal;
+                RelocateElements(i - 1, i);
+            }
+            CompareElements(true,
+            ElementColor.Build(i, Color.red),
+            ElementColor.Build(i - 1, Color.red));
+            yield return i;
+        }
+
+        rightCounter++;
     }
 }

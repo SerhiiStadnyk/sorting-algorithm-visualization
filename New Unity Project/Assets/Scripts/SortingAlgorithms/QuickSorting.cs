@@ -13,29 +13,54 @@ public class QuickSorting : SortingAlgorithmBase
         int endPoint = Array.Count - 1;
         int median = -1;
         List<int> pivotList = new List<int>();
+        int tmpEndPoint = 1;
 
         do
         {
             foreach (int i in SortChunk(startPoint, endPoint)) 
             {
                 yield return 0;
-                pivotList.Add(startPoint);
             }
 
-            if (endPoint <= startPoint || median == 0)
+            median = (endPoint - startPoint) / 2;
+            if (endPoint > startPoint && median != 0) 
             {
-                pivotList.RemoveAt(pivotList.Count - 1);
-                startPoint = endPoint + 1;
-                endPoint = pivotList[pivotList.Count - 1];
+                median = (endPoint - startPoint) / 2;
+                endPoint -= median;
+
+                if (endPoint != pivotList.Count - 1)
+                    pivotList.Add(endPoint);
+
+                if (tmpEndPoint == 0)
+                    tmpEndPoint = endPoint;
+            }
+            else
+            {
+                //if (pivotList.Count >= 2)
+                //{
+                //    startPoint = pivotList[pivotList.Count - 1];
+                //    endPoint = pivotList[pivotList.Count - 2];
+                //    pivotList.RemoveAt(pivotList.Count - 1);
+                //}
+                //else if (pivotList.Count == 1)
+                //{
+                //    startPoint = pivotList[pivotList.Count - 1];
+                //    endPoint = Array.Count - 1;
+                //    pivotList.RemoveAt(pivotList.Count - 1);
+                //}
+                //else
+                //{
+                //    break;
+                //}
+
+                startPoint = endPoint + 1 + endPoint/2;
+                endPoint = startPoint * 2;
+
+                tmpEndPoint = 0;
 
                 Debug.Log("=======================");
                 Debug.Log("Start Point " + startPoint);
                 Debug.Log("End Point " + endPoint);
-            }
-            else 
-            {
-                median = (endPoint - startPoint) / 2;
-                endPoint -= median;
             }
 
             yield return 0;
@@ -51,16 +76,16 @@ public class QuickSorting : SortingAlgorithmBase
 
         for (int i = startIndex; i < endIndex - rightOffset; i++)
         {
-            CompareElements(ElementColor.Build(endIndex, Color.blue),
+            CompareElements(false,ElementColor.Build(endIndex, Color.blue),
                             ElementColor.Build(startIndex, Color.blue));
 
-            CompareElements(ElementColor.Build(i, Color.green));
+            CompareElements(true, ElementColor.Build(i, Color.green));
             if (Array[i] >= median)
             {
                 for (int a = endIndex - rightOffset; a > i; a--)
                 {
                     rightOffset++;
-                    CompareElements(
+                    CompareElements(true,
                         ElementColor.Build(i, Color.green),
                         ElementColor.Build(a, Color.red),
                         ElementColor.Build(endIndex, Color.blue),
@@ -110,8 +135,6 @@ public class QuickSorting : SortingAlgorithmBase
         medianList.ForEach(value => sum += value);
         if(medianList.Count > 0)
             sum = sum / medianList.Count;
-
-        Debug.Log(sum);
 
         return sum;
     }

@@ -10,17 +10,17 @@ public class InsertionSorting : SortingAlgorithmBase
         {
             if (Array[i] >= Array[i - 1])
             {
-                CompareElements(
-                    ElementColor.Build(i, Color.green),
-                    ElementColor.Build(i-1, Color.red));
-                yield return i;
                 continue;
             }
+            CompareElements(true,
+                ElementColor.Build(i, Color.green),
+                ElementColor.Build(i - 1, Color.red));
+            yield return i;
 
             for (int a = i; a > 0; a--)
             {
                 int b = a - 1;
-                CompareElements(
+                CompareElements(true,
                     ElementColor.Build(i, Color.green),
                     ElementColor.Build(b, Color.red));
                 yield return a;

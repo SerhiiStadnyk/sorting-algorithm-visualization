@@ -6,7 +6,7 @@ public enum SortingTypes
     Shaker,
     Insertion,
     InsertionBinary,
-    QuickSort
+    //QuickSort
 };
 
 public enum RandomizerTypes
@@ -39,6 +39,8 @@ public class Settings : ScriptableObject
 
     public int Delay { get; private set; }
     public int SortingTactsPerFrame { get; private set; } = 1;
+
+    public bool FastSort { get; private set; }
 
     public void SetDelay(int value)
     {

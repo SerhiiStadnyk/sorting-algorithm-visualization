@@ -20,7 +20,7 @@ public class BubbleSorting : SortingAlgorithmBase
                     RelocateElements(a, a + 1);
                     isSorted = false;
                 }
-                CompareElements(
+                CompareElements(true,
                     ElementColor.Build(a, Color.red),
                     ElementColor.Build(a+1, Color.red));
                 yield return i;
