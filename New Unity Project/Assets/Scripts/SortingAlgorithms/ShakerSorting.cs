@@ -37,13 +37,21 @@ public class ShakerSorting : SortingAlgorithmBase
         FinishSorting();
     }
 
+    int leftOffsetStart = 0;
+    int leftOffsetEnd = 0;
+    int rightOffsetStart = 0;
+    int rightOffsetEnd = 0;
     private IEnumerable<int> LeftSort()
     {
         wasSorted = false;
-        for (int i = 0 + rightCounter; i < Array.Count - 1 - leftCounter; i++)
+        int offset = 0;
+        int offsetA = 0;
+        for (int i = 0 + rightCounter + leftOffsetStart; i < Array.Count - 1 - leftOffsetEnd - leftCounter; i++)
         {
+            offsetA++;
             if (Array[i] > Array[i + 1]) 
             {
+                offsetA = 0;
                 wasSorted = true;
                 int tmpVal = Array[i];
                 Array[i] = Array[i + 1];
@@ -51,6 +59,9 @@ public class ShakerSorting : SortingAlgorithmBase
                 RelocateElements(i + 1, i);
 
             }
+            if(!wasSorted)
+                offset++;
+
             CompareElements(true,
             ElementColor.Build(i, Color.red),
             ElementColor.Build(i + 1, Color.red));
@@ -58,20 +69,29 @@ public class ShakerSorting : SortingAlgorithmBase
         }
 
         leftCounter++;
+        leftOffsetStart += offset - 1;
+        leftOffsetEnd += offsetA;
     }
     private IEnumerable<int> RightSort()
     {
         wasSorted = false;
-        for (int i = Array.Count - 1 - leftCounter; i > 0 + rightCounter; i--)
+        int offset = 0;
+        int offsetA = 0;
+        for (int i = Array.Count - 1 - rightOffsetStart - leftCounter; i > 0 + rightOffsetEnd + rightCounter; i--)
         {
+            offsetA++;
             if (Array[i] < Array[i - 1])
             {
+                offsetA = 0;
                 wasSorted = true;
                 int tmpVal = Array[i];
                 Array[i] = Array[i - 1];
                 Array[i - 1] = tmpVal;
                 RelocateElements(i - 1, i);
             }
+            if (!wasSorted)
+                offset++;
+
             CompareElements(true,
             ElementColor.Build(i, Color.red),
             ElementColor.Build(i - 1, Color.red));
@@ -79,5 +99,7 @@ public class ShakerSorting : SortingAlgorithmBase
         }
 
         rightCounter++;
+        rightOffsetStart += offset - 1;
+        rightOffsetEnd += offsetA;
     }
 }
