@@ -175,8 +175,13 @@ class ColumnVisualizer : VisualizerBase
 
     public override int CalculateMaxArrayNumber()
     {
+        containerRect.ForceUpdateRectTransforms();
         float containerWidth = containerRect.rect.width;
         int maxElements = (int)((containerWidth) / (minElementWidth));
+        Debug.Log("containerWidth: " + containerWidth);
+        Debug.Log("maxElements: " + maxElements);
+        float containerWidth_B = containerRect.sizeDelta.x;
+        Debug.Log("containerWidth_B: " + containerWidth_B);
 
         return maxElements;
     }

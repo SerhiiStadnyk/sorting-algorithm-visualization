@@ -34,8 +34,9 @@ public class SortingController : MonoBehaviour, ISortingHandable
         arrayVisualizer = GetComponent<ArrayVisualizerController>();
     }
 
-    private void Start()
+    private IEnumerator Start()
     {
+        yield return new WaitForEndOfFrame();
         arrayVisualizer.Init(VisualizerTypes.Column, dataArray);
 
         settings.SetMaximumArraySize(arrayVisualizer.CalculateMaxArraySize());

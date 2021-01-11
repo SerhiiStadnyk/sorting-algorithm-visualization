@@ -106,6 +106,13 @@ public class DataArray
     private List<int> CreateArrayLast(int arraySize)
     {
         var tmpList = new List<int>();
+
+        if (arraySize < 1) 
+        {
+            Debug.LogError("Incorrect array size");
+            return tmpList;
+        }
+
         for (int i = 0; i < arraySize; i++)
         {
             tmpList.Add(i);

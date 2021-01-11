@@ -76,24 +76,26 @@ public class QuickSorting : SortingAlgorithmBase
 
         for (int i = startIndex; i < endIndex - rightOffset; i++)
         {
-            CompareElements(false,ElementColor.Build(endIndex, Color.blue),
-                            ElementColor.Build(startIndex, Color.blue));
+            CompareElements(true,
+                ElementColor.Build(endIndex, Color.blue),
+                ElementColor.Build(startIndex, Color.blue),
+                ElementColor.Build(i, Color.green));
 
-            CompareElements(true, ElementColor.Build(i, Color.green));
             if (Array[i] >= median)
             {
                 for (int a = endIndex - rightOffset; a > i; a--)
                 {
-                    rightOffset++;
                     CompareElements(true,
                         ElementColor.Build(i, Color.green),
                         ElementColor.Build(a, Color.red),
                         ElementColor.Build(endIndex, Color.blue),
                         ElementColor.Build(startIndex, Color.blue));
+
+                    rightOffset++;
                     if (Array[a] < median)
                     {
                         SwapElements(i, a);
-                        yield return a;
+                        //yield return a;
                         break;
                     }
 
