@@ -1,55 +1,68 @@
 ﻿using System.Collections.Generic;
+using ArrayVisualizer;
 using UnityEngine;
 
-public class InsertionSorting : SortingAlgorithmBase
+namespace SortingAlgorithms
 {
-    public InsertionSorting(ISortingHandable handleable) : base(handleable) { }
-    public override IEnumerable<int> Sort()
+    public class InsertionSorting : SortingAlgorithmBase
     {
-        for (int i = 1; i < Array.Count; i++)
+        public InsertionSorting(ISortingHandable handleable) : base(handleable)
         {
-            if (Array[i] >= Array[i - 1])
-            {
-                continue;
-            }
-            CompareElements(true,
-                ElementColor.Build(i, Color.green),
-                ElementColor.Build(i - 1, Color.red));
-            yield return i;
+        }
 
-            for (int a = i; a > 0; a--)
+
+        public override IEnumerable<int> Sort()
+        {
+            for (int i = 1; i < Array.Count; i++)
             {
-                int b = a - 1;
-                CompareElements(true,
+                if (Array[i] >= Array[i - 1])
+                {
+                    continue;
+                }
+
+                CompareElements(
+                    true,
                     ElementColor.Build(i, Color.green),
-                    ElementColor.Build(b, Color.red));
-                yield return a;
-                if (Array[i] >= Array[b])
-                {
-                    ShiftArray(b + 1, i, Array);
-                    break;
-                }
-                else if (b == 0)
-                {
-                    ShiftArray(b, i, Array);
-                    break;
-                }
+                    ElementColor.Build(i - 1, Color.red));
+                yield return i;
 
+                for (int a = i; a > 0; a--)
+                {
+                    int b = a - 1;
+                    CompareElements(
+                        true,
+                        ElementColor.Build(i, Color.green),
+                        ElementColor.Build(b, Color.red));
+                    yield return a;
+                    if (Array[i] >= Array[b])
+                    {
+                        ShiftArray(b + 1, i, Array);
+                        break;
+                    }
+
+                    if (b == 0)
+                    {
+                        ShiftArray(b, i, Array);
+                        break;
+                    }
+                }
             }
+
+            FinishSorting();
         }
 
-        FinishSorting();
-    }
 
-    private void ShiftArray(int fromIndex, int toIndex, List<int> array) 
-    {
-        int frontElement = array[toIndex];
-        for (int i = toIndex; i > fromIndex; i--)
+        private void ShiftArray(int fromIndex, int toIndex, List<int> array)
         {
-            array[i] = array[i - 1];
-            RelocateElements(i, i - 1);
+            int frontElement = array[toIndex];
+            for (int i = toIndex; i > fromIndex; i--)
+            {
+                array[i] = array[i - 1];
+                RelocateElements(i, i - 1);
+            }
+
+            array[fromIndex] = frontElement;
+            RelocateElements(fromIndex, 0);
         }
-        array[fromIndex] = frontElement;
-        RelocateElements(fromIndex, 0);
     }
 }

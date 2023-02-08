@@ -1,17 +1,25 @@
 ﻿using UnityEngine;
 
-public class ElementColor
+namespace ArrayVisualizer
 {
-    public int elementInxe;
-    public Color elementColor;
-
-    static public ElementColor Build(int index, Color color) 
+    public class ElementColor
     {
-        ElementColor elementColor = new ElementColor() 
+        private int _elementIndex;
+        private Color _elementColor;
+
+        public int ElementIndex => _elementIndex;
+
+        public Color ElementColor1 => _elementColor;
+
+
+        public static ElementColor Build(int index, Color color)
         {
-            elementColor = color,
-            elementInxe = index
-        };
-        return elementColor;
+            ElementColor elementColor = new ElementColor
+            {
+                _elementColor = color,
+                _elementIndex = index
+            };
+            return elementColor;
+        }
     }
 }

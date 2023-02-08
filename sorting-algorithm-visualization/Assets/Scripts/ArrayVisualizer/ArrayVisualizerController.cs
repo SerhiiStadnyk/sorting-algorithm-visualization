@@ -1,53 +1,71 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
+using UnityEngine.Serialization;
+using VisualizerSettings;
 
-public class ArrayVisualizerController : MonoBehaviour
+namespace ArrayVisualizer
 {
-#pragma warning disable 0649
-    [SerializeField] private RectTransform containerRect;
-    [SerializeField] private VisualizersList visualizersList;
-    [SerializeField] private Settings settings;
-#pragma warning restore 0649
+    public class ArrayVisualizerController : MonoBehaviour
+    {
+        [FormerlySerializedAs("containerRect")]
+        [SerializeField]
+        private RectTransform _containerRect;
 
-    private VisualizerBase visualizerBase;
+        [FormerlySerializedAs("visualizersList")]
+        [SerializeField]
+        private VisualizersList _visualizersList;
 
-    public void Init(VisualizerTypes visualizerType, DataArray dataArray) 
-    {
-        visualizerBase = visualizersList.GetVisualizator(visualizerType, dataArray, containerRect, settings);
-    }
+        [FormerlySerializedAs("settings")]
+        [SerializeField]
+        private Settings _settings;
 
-    public void Build() 
-    {
-        visualizerBase.Build();
-    }
+        private VisualizerBase _visualizerBase;
 
-    public void UpdateElement(int elementIndex) 
-    {
-        visualizerBase.UpdateElement(elementIndex);
-    }
 
-    public void RemoveMarks() 
-    {
-        visualizerBase.RemoveMarks();
-    }
-    public void MarkElements() 
-    {
-        visualizerBase.MarkElements();
-    }
-    public void AddMarks(params ElementColor[] indexArray) 
-    {
-        visualizerBase.AddMarks(indexArray);
-    }
+        public void Init(VisualizerTypes visualizerType, DataArray dataArray)
+        {
+            _visualizerBase = _visualizersList.GetVisualizer(visualizerType, dataArray, _containerRect, _settings);
+        }
 
-    public void MarkForCheck(int index, bool isWrong) 
-    {
-        visualizerBase.MarkForCheck(index, isWrong);
-    }
 
-    public int CalculateMaxArraySize() 
-    {
-        return visualizerBase.CalculateMaxArrayNumber();
+        public void Build()
+        {
+            _visualizerBase.Build();
+        }
+
+
+        public void UpdateElement(int elementIndex)
+        {
+            _visualizerBase.UpdateElement(elementIndex);
+        }
+
+
+        public void RemoveMarks()
+        {
+            _visualizerBase.RemoveMarks();
+        }
+
+
+        public void MarkElements()
+        {
+            _visualizerBase.MarkElements();
+        }
+
+
+        public void AddMarks(params ElementColor[] indexArray)
+        {
+            _visualizerBase.AddMarks(indexArray);
+        }
+
+
+        public void MarkForCheck(int index, bool isWrong)
+        {
+            _visualizerBase.MarkForCheck(index, isWrong);
+        }
+
+
+        public int CalculateMaxArraySize()
+        {
+            return _visualizerBase.CalculateMaxArrayNumber();
+        }
     }
 }

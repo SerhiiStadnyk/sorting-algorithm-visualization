@@ -1,17 +1,24 @@
 ﻿using System.Collections.Generic;
+using ArrayVisualizer;
 
-public abstract class SortingAlgorithmBase
+namespace SortingAlgorithms
 {
-    public virtual ISortingHandable Handleable { get; set; }
-    public virtual void CompareElements(bool count = false, params ElementColor[] markedElements) { Handleable.MarkElements(count, markedElements); }
-    public virtual void RelocateElements(int fromIndex, int toIndex) { Handleable.RelocateElements(fromIndex, toIndex); }
-    public virtual void FinishSorting() { Handleable.FinishSorting(); }
-    public abstract IEnumerable<int> Sort();
-
-    public List<int> Array { get => Handleable.Array; set => Handleable.Array = value; }
-
-    public SortingAlgorithmBase(ISortingHandable insertedRelocatable)
+    public abstract class SortingAlgorithmBase
     {
-        Handleable = insertedRelocatable;
+        public abstract IEnumerable<int> Sort();
+
+
+        protected SortingAlgorithmBase(ISortingHandable insertedRelocatable)
+        {
+            Handleable = insertedRelocatable;
+        }
+
+
+        protected virtual ISortingHandable Handleable { get; set; }
+
+        protected List<int> Array { get => Handleable.Array; set => Handleable.Array = value; }
+        protected virtual void CompareElements(bool count = false, params ElementColor[] markedElements) { Handleable.MarkElements(count, markedElements); }
+        protected virtual void RelocateElements(int fromIndex, int toIndex) { Handleable.RelocateElements(fromIndex, toIndex); }
+        protected virtual void FinishSorting() { Handleable.FinishSorting(); }
     }
 }

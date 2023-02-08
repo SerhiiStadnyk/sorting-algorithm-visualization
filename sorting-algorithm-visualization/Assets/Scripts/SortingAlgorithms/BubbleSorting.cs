@@ -1,37 +1,45 @@
 ﻿using System.Collections.Generic;
+using ArrayVisualizer;
 using UnityEngine;
 
-public class BubbleSorting : SortingAlgorithmBase
+namespace SortingAlgorithms
 {
-    public BubbleSorting(ISortingHandable handleable) : base(handleable) { }
-
-    public override IEnumerable<int> Sort() 
+    public class BubbleSorting : SortingAlgorithmBase
     {
-        for (int i = 0; i < Array.Count; i++)
+        public BubbleSorting(ISortingHandable handleable) : base(handleable)
         {
-            bool isSorted = true;
-            for (int a = 0; a < Array.Count - i - 1; a++)
+        }
+
+
+        public override IEnumerable<int> Sort()
+        {
+            for (int i = 0; i < Array.Count; i++)
             {
-                if (Array[a] > Array[a + 1])
+                bool isSorted = true;
+                for (int a = 0; a < Array.Count - i - 1; a++)
                 {
-                    int tmp = Array[a];
-                    Array[a] = Array[a + 1];
-                    Array[a + 1] = tmp;
-                    RelocateElements(a, a + 1);
-                    isSorted = false;
+                    if (Array[a] > Array[a + 1])
+                    {
+                        (Array[a], Array[a + 1]) = (Array[a + 1], Array[a]);
+                        RelocateElements(a, a + 1);
+                        isSorted = false;
+                    }
+
+                    CompareElements(
+                        true,
+                        ElementColor.Build(a, Color.red),
+                        ElementColor.Build(a + 1, Color.red));
+                    yield return i;
                 }
-                CompareElements(true,
-                    ElementColor.Build(a, Color.red),
-                    ElementColor.Build(a+1, Color.red));
-                yield return i;
+
+                if (isSorted)
+                {
+                    FinishSorting();
+                    yield break;
+                }
             }
 
-            if (isSorted)
-            {
-                FinishSorting();
-                yield break;
-            }
+            FinishSorting();
         }
-        FinishSorting();
     }
 }

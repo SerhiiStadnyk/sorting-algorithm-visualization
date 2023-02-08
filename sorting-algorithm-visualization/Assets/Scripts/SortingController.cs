@@ -1,190 +1,261 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using ArrayVisualizer;
+using SortingAlgorithms;
 using TMPro;
+using UnityEngine;
+using VisualizerSettings;
 
 [RequireComponent(typeof(ArrayVisualizerController))]
 public class SortingController : MonoBehaviour, ISortingHandable
 {
-#pragma warning disable 0649
-    [SerializeField] private Settings settings;
-    [SerializeField] private SettingsView settingsView;
-    [SerializeField] private DataArray dataArray;
+    [SerializeField]
+    private Settings _settings;
 
-    [SerializeField] private TMP_Text arrayAccesInfo;
-    [SerializeField] private TMP_Text comparesInfo;
-    [SerializeField] private TMP_Text timeInfo;
-#pragma warning restore 0649
+    [SerializeField]
+    private SettingsView _settingsView;
 
-    private SortingAlgorithmBase sortingAlgorithm;
-    private ArrayVisualizerController arrayVisualizer;
+    [SerializeField]
+    private DataArray _dataArray;
 
-    private Coroutine sortingCoroutine;
-    private Coroutine checkingCoroutine;
+    [SerializeField]
+    private TMP_Text _arrayAccesInfo;
 
-    private List<int> tmpArray;
+    [SerializeField]
+    private TMP_Text _comparesInfo;
 
-    public bool isSorting;
+    [SerializeField]
+    private TMP_Text _timeInfo;
 
-    public List<int> Array { get => dataArray.Array; set => dataArray.Array = value; }
+    private ArrayVisualizerController _arrayVisualizer;
+    private Coroutine _checkingCoroutine;
+
+    private SortingAlgorithmBase _sortingAlgorithm;
+
+    private Coroutine _sortingCoroutine;
+
+    private List<int> _tmpArray;
+
+    private int counter = 1;
+
+    public bool IsSorting { get; private set; }
+
+    public List<int> Array
+    {
+        get => _dataArray.Array;
+        set => _dataArray.Array = value;
+    }
+
+
+    public void RelocateElements(int fromIndex, int toIndex)
+    {
+        TextAddValue(_arrayAccesInfo);
+
+        _arrayVisualizer.UpdateElement(fromIndex);
+        _arrayVisualizer.UpdateElement(toIndex);
+    }
+
+
+    public void FinishSorting()
+    {
+        if (_sortingCoroutine != null)
+        {
+            StopCoroutine(_sortingCoroutine);
+        }
+
+        if (_checkingCoroutine != null)
+        {
+            StopCoroutine(_checkingCoroutine);
+        }
+
+        _checkingCoroutine = StartCoroutine(CheckData());
+    }
+
+
+    public void MarkElements(bool count = false, params ElementColor[] markedElements)
+    {
+        if (count)
+        {
+            TextAddValue(_comparesInfo, markedElements.Length);
+        }
+
+        _arrayVisualizer.AddMarks(markedElements);
+    }
+
+
+    public void CreateArray()
+    {
+        _dataArray.CreateArray(_settings.ArraySize, _settings.RandomizerType);
+        _arrayVisualizer.Build();
+    }
+
+
+    public void StartSorting()
+    {
+        if (IsSorting)
+        {
+            return;
+        }
+
+        if (_dataArray.Array == null || _dataArray.Array.Count == 0)
+        {
+            return;
+        }
+
+        IsSorting = true;
+        _tmpArray = new List<int>(_dataArray.Array);
+
+        CleanUp();
+
+        _arrayAccesInfo.text = "0";
+        _comparesInfo.text = "0";
+        _timeInfo.text = "0";
+
+        _sortingAlgorithm = SortingAlgorithmCreator.GetAlgorithm(this, _settings.SortingType);
+
+        if (_checkingCoroutine != null)
+        {
+            StopCoroutine(_checkingCoroutine);
+        }
+
+        if (_sortingCoroutine != null)
+        {
+            StopCoroutine(_sortingCoroutine);
+        }
+
+        _sortingCoroutine = StartCoroutine(StateSorting());
+    }
+
+
+    public void Button_CheckData()
+    {
+        if (IsSorting)
+        {
+            return;
+        }
+
+        CleanUp();
+        if (_checkingCoroutine != null)
+        {
+            StopCoroutine(_checkingCoroutine);
+        }
+
+        _checkingCoroutine = StartCoroutine(CheckData());
+    }
+
+
+    public void ButtonReset()
+    {
+        IsSorting = false;
+
+        if (_checkingCoroutine != null)
+        {
+            StopCoroutine(_checkingCoroutine);
+        }
+
+        if (_sortingCoroutine != null)
+        {
+            StopCoroutine(_sortingCoroutine);
+        }
+
+        _dataArray.Array = _tmpArray;
+        CleanUp();
+
+        _arrayVisualizer.Build();
+    }
+
 
     private void Awake()
     {
-        dataArray = new DataArray();
-        arrayVisualizer = GetComponent<ArrayVisualizerController>();
+        _dataArray = new DataArray();
+        _arrayVisualizer = GetComponent<ArrayVisualizerController>();
     }
+
 
     private IEnumerator Start()
     {
         yield return new WaitForEndOfFrame();
-        arrayVisualizer.Init(VisualizerTypes.Column, dataArray);
+        _arrayVisualizer.Init(VisualizerTypes.Column, _dataArray);
 
-        settings.SetMaximumArraySize(arrayVisualizer.CalculateMaxArraySize());
-        settingsView.arraySizeSlider.maxValue = settings.MaxArraySize;
-        settingsView.arraySizeSlider.value = settings.ArraySize;
+        _settings.SetMaximumArraySize(_arrayVisualizer.CalculateMaxArraySize());
+        _settingsView._arraySizeSlider.maxValue = _settings.MaxArraySize;
+        _settingsView._arraySizeSlider.value = _settings.ArraySize;
     }
 
-    public void CreateArray()
-    {
-        dataArray.CreateArray(settings.ArraySize, settings.RandomizerType);
-        arrayVisualizer.Build();
-    }
-
-    public void StartSorting()
-    {
-        if (isSorting)
-            return;
-
-        if (dataArray.Array == null || dataArray.Array.Count == 0)
-            return;
-        isSorting = true;
-        tmpArray = new List<int>(dataArray.Array);
-
-        CleanUp();
-
-        arrayAccesInfo.text = "0";
-        comparesInfo.text = "0";
-        timeInfo.text = "0";
-
-        sortingAlgorithm = SortingAlgorithmCreator.GetAlgorithm(this, settings.SortingType);
-
-        if (checkingCoroutine != null)
-            StopCoroutine(checkingCoroutine);
-        if (sortingCoroutine != null)
-            StopCoroutine(sortingCoroutine);
-        sortingCoroutine = StartCoroutine(StateSorting());
-    }
 
     private void CleanUp()
     {
-        sortingAlgorithm = null;
-        arrayVisualizer.RemoveMarks();
+        _sortingAlgorithm = null;
+        _arrayVisualizer.RemoveMarks();
     }
 
-    private void TextAddValue(TMP_Text text, float value = 1) 
+
+    private void TextAddValue(TMP_Text text, float value = 1)
     {
         float tmp = float.Parse(text.text);
         tmp += value;
-        text.text = (tmp+ value).ToString();
+        text.text = (tmp + value).ToString();
     }
 
-    public void RelocateElements(int fromIndex, int toIndex)
-    {
-        TextAddValue(arrayAccesInfo);
 
-        arrayVisualizer.UpdateElement(fromIndex);
-        arrayVisualizer.UpdateElement(toIndex);
-    }
-
-    public void Button_CheckData()
-    {
-        if (isSorting)
-            return;
-
-        CleanUp();
-        if (checkingCoroutine != null)
-            StopCoroutine(checkingCoroutine);
-        checkingCoroutine = StartCoroutine(CheckData());
-    }
-
-    public void ButtonReset() 
-    {
-        isSorting = false;
-
-        if (checkingCoroutine != null)
-            StopCoroutine(checkingCoroutine);
-        if (sortingCoroutine != null)
-            StopCoroutine(sortingCoroutine);
-
-        dataArray.Array = tmpArray;
-        CleanUp();
-
-        arrayVisualizer.Build();
-    }
-
-    public void FinishSorting()
-    {
-        if(sortingCoroutine != null)
-            StopCoroutine(sortingCoroutine);
-
-        if (checkingCoroutine != null)
-            StopCoroutine(checkingCoroutine);
-        checkingCoroutine = StartCoroutine(CheckData());
-    }
-
-    int counter = 1;
     private IEnumerator StateSorting()
     {
         float time = Time.realtimeSinceStartup;
-        foreach (int i in sortingAlgorithm.Sort()) 
+        foreach (int i in _sortingAlgorithm.Sort())
         {
-            if (counter >= settings.SortingTactsPerFrame)
+            if (counter >= _settings.SortingTactsPerFrame)
             {
-                if (!isSorting)
+                if (!IsSorting)
+                {
                     yield break;
+                }
 
                 counter = 1;
-                arrayVisualizer.MarkElements();
-                if(!settings.FastSort)
-                    yield return new WaitForSeconds(settings.Delay / 1000f);
-                timeInfo.text = (Time.realtimeSinceStartup - time).ToString();
+                _arrayVisualizer.MarkElements();
+                if (!_settings.FastSort)
+                {
+                    yield return new WaitForSeconds(_settings.Delay / 1000f);
+                }
+
+                _timeInfo.text = (Time.realtimeSinceStartup - time).ToString();
             }
-            else 
+            else
             {
                 counter++;
             }
         }
 
-        if(!settings.FastSort)
-            timeInfo.text = (Time.realtimeSinceStartup - time).ToString();
+        if (!_settings.FastSort)
+        {
+            _timeInfo.text = (Time.realtimeSinceStartup - time).ToString();
+        }
     }
 
-    private IEnumerator CheckData() 
+
+    private IEnumerator CheckData()
     {
         counter = 0;
-        arrayVisualizer.RemoveMarks();
-        for (int i = 0; i < dataArray.Array.Count; i++)
+        _arrayVisualizer.RemoveMarks();
+        for (int i = 0; i < _dataArray.Array.Count; i++)
         {
-            if (dataArray.Array[i] != i)
-                arrayVisualizer.MarkForCheck(i, true);
+            if (_dataArray.Array[i] != i)
+            {
+                _arrayVisualizer.MarkForCheck(i, true);
+            }
             else
-                arrayVisualizer.MarkForCheck(i, false);
+            {
+                _arrayVisualizer.MarkForCheck(i, false);
+            }
 
-            if (counter == Array.Count/60)
+            if (counter == Array.Count / 60)
             {
                 counter = 0;
                 yield return null;
             }
+
             counter++;
         }
 
-        isSorting = false;
-    }
-
-    public void MarkElements(bool count = false, params ElementColor[] markedElements)
-    {
-        if(count)
-            TextAddValue(comparesInfo, markedElements.Length);
-        arrayVisualizer.AddMarks(markedElements);
+        IsSorting = false;
     }
 }

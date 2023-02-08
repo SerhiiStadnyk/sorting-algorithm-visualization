@@ -1,188 +1,213 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using VisualizerSettings;
 
-class ColumnVisualizer : VisualizerBase
+namespace ArrayVisualizer
 {
-    private float minElementWidth;
-    private float maxElementWidth;
-    private int padding;
-    private bool dynamicWidth;
-
-    private List<Image> elementsList = new List<Image>();
-
-    private float elementWidth;
-    private ColumnVisualyzerSettings columnSettings;
-
-    public ColumnVisualizer(ColumnVisualyzerSettings columnSettings, DataArray dataArray, RectTransform containerRect, Settings settings)
+    internal class ColumnVisualizer : VisualizerBase
     {
-        this.columnSettings = columnSettings;
-        this.dataArray = dataArray;
-        this.containerRect = containerRect;
-        this.settings = settings;
-        UpdateSettings();
-    }
+        private readonly ColumnVisualyzerSettings _columnSettings;
 
-    private void UpdateSettings() 
-    {
-        minElementWidth = columnSettings.minElementWidth;
-        maxElementWidth = columnSettings.maxElementWidth;
-        padding = columnSettings.padding;
-        dynamicWidth = columnSettings.dynamicWidth;
+        private bool _dynamicWidth;
+        private readonly List<Image> _elementsList = new List<Image>();
+        private float _elementWidth;
+        private float _maxElementWidth;
+        private float _minElementWidth;
+        private int _padding;
 
-        switch (settings.SortingType)
+
+        public ColumnVisualizer(
+            ColumnVisualyzerSettings columnSettings,
+            DataArray dataArray,
+            RectTransform containerRect,
+            Settings settings)
         {
-            default:
-                visualizationColoring = new VisualizerColoringStandart(elementsList);
-                break;
+            _columnSettings = columnSettings;
+            this.dataArray = dataArray;
+            this.containerRect = containerRect;
+            this.settings = settings;
+            UpdateSettings();
         }
-    }
 
-    public override void Build()
-    {
-        UpdateSettings();
-        UpdateContainer();
-    }
 
-    public override void UpdateContainer()
-    {
-        if (dynamicWidth)
-            maxElementWidth = CalculateDynamicWidth();
-        elementWidth = GetElementWidth();
-
-        int startingIndex = 0;
-
-        if (elementsList.Count > 0)
+        public override void Build()
         {
-            for (int i = 0; i < elementsList.Count; i++)
+            UpdateSettings();
+            UpdateContainer();
+        }
+
+
+        public override void UpdateContainer()
+        {
+            if (_dynamicWidth)
             {
-                if (dataArray.Array.Count > i)
+                _maxElementWidth = CalculateDynamicWidth();
+            }
+
+            _elementWidth = GetElementWidth();
+
+            int startingIndex = 0;
+
+            if (_elementsList.Count > 0)
+            {
+                for (int i = 0; i < _elementsList.Count; i++)
                 {
-                    SetupElement(dataArray.Array[i], i);
+                    if (dataArray.Array.Count > i)
+                    {
+                        SetupElement(dataArray.Array[i], i);
+                    }
+                    else
+                    {
+                        _elementsList[i].gameObject.SetActive(false);
+                    }
+
+                    startingIndex++;
                 }
-                else
-                {
-                    elementsList[i].gameObject.SetActive(false);
-                }
-                startingIndex++;
+            }
+
+            for (int i = startingIndex; i < dataArray.Array.Count; i++)
+            {
+                CreateElement();
+                SetupElement(dataArray.Array[i], i);
             }
         }
 
-        for (int i = startingIndex; i < dataArray.Array.Count; i++)
+
+        public override void UpdateElement(int elementIndex)
         {
-            CreateElement();
-            SetupElement(dataArray.Array[i], i);
-        }
-    }
-
-    public void SetupElement(int elementValue, int elementIndex)
-    {
-        Image element = elementsList[elementIndex];
-        element.gameObject.SetActive(true);
-        element.rectTransform.sizeDelta = new Vector2(elementWidth, GetElementHight(elementValue));
-        element.transform.localPosition = GetElementPosition(elementIndex);
-        element.color = Color.white;
-    }
-
-    public override void UpdateElement(int elementIndex)
-    {
-        Image element = elementsList[elementIndex];
-        int elementValue = dataArray.Array[elementIndex];
-        element.rectTransform.sizeDelta = new Vector2(elementWidth, GetElementHight(elementValue));
-    }
-
-    public void CreateElement()
-    {
-        Image image = new GameObject().AddComponent<Image>();
-        image.rectTransform.pivot = new Vector2(0.5f, 0f);
-        image.transform.SetParent(containerRect);
-        image.transform.localScale = Vector3.one;
-        elementsList.Add(image);
-    }
-
-    public float GetElementWidth()
-    {
-        float containerWidth = containerRect.rect.width;
-        float dynamicWidth = containerWidth / dataArray.Array.Count;
-
-        if (dynamicWidth > maxElementWidth)
-            return maxElementWidth;
-        else if (dynamicWidth > minElementWidth)
-            return dynamicWidth;
-        else
-            return minElementWidth;
-    }
-
-    public float GetElementHight(int elementValue)
-    {
-        float result = 0;
-
-        float maxHeight = containerRect.rect.height;
-        float elementRatio = ((float)elementValue + 1f) / dataArray.Array.Count;
-
-        result = maxHeight * elementRatio;
-
-        return result;
-    }
-
-    public Vector2 GetElementPosition(int imageIndex)
-    {
-        Vector2 result = Vector2.zero;
-
-        if ((maxElementWidth + padding) * dataArray.Array.Count < containerRect.rect.width)
-        {
-            result = GetElementPositionEqulibrium(imageIndex);
-        }
-        else
-        {
-            result = GetElementPositionFlat(imageIndex);
+            Image element = _elementsList[elementIndex];
+            int elementValue = dataArray.Array[elementIndex];
+            element.rectTransform.sizeDelta = new Vector2(_elementWidth, GetElementHeight(elementValue));
         }
 
-        return result;
-    }
 
-    public Vector2 GetElementPositionFlat(int imageIndex)
-    {
-        float containerWidth = containerRect.rect.width;
-        float startingX = containerWidth * 0.5f * -1;
-        float xPos = startingX + (elementWidth) * imageIndex + (elementWidth * 0.5f);
+        public override int CalculateMaxArrayNumber()
+        {
+            containerRect.ForceUpdateRectTransforms();
+            float containerWidth = containerRect.rect.width;
 
-        Vector2 result = new Vector2(xPos, containerRect.rect.height * 0.5f * -1);
+            return (int)(containerWidth / _minElementWidth);
+        }
 
-        return result;
-    }
 
-    public Vector2 GetElementPositionEqulibrium(int imageIndex)
-    {
-        float containerWidth = containerRect.rect.width;
-        float xOffset = 1f / (dataArray.Array.Count + 1);
+        private void UpdateSettings()
+        {
+            _minElementWidth = _columnSettings.MinElementWidth;
+            _maxElementWidth = _columnSettings.MaxElementWidth;
+            _padding = _columnSettings.Padding;
+            _dynamicWidth = _columnSettings.DynamicWidth;
 
-        float gap = containerWidth * xOffset;
+            switch (settings.SortingType)
+            {
+                default:
+                    visualizationColoring = new VisualizerColoringStandard(_elementsList);
+                    break;
+            }
+        }
 
-        float xPos = (containerWidth * 0.5f * -1) + gap * (imageIndex + 1);
 
-        Vector2 result = new Vector2(xPos, containerRect.rect.height * 0.5f * -1);
+        private void SetupElement(int elementValue, int elementIndex)
+        {
+            Image element = _elementsList[elementIndex];
+            element.gameObject.SetActive(true);
+            element.rectTransform.sizeDelta = new Vector2(_elementWidth, GetElementHeight(elementValue));
+            element.transform.localPosition = GetElementPosition(elementIndex);
+            element.color = Color.white;
+        }
 
-        return result;
-    }
 
-    public float CalculateDynamicWidth()
-    {
-        float containerWidth = containerRect.rect.width;
-        float result = containerWidth / 40;
-        return result;
-    }
+        private void CreateElement()
+        {
+            Image image = new GameObject().AddComponent<Image>();
+            image.rectTransform.pivot = new Vector2(0.5f, 0f);
 
-    public override int CalculateMaxArrayNumber()
-    {
-        containerRect.ForceUpdateRectTransforms();
-        float containerWidth = containerRect.rect.width;
-        int maxElements = (int)((containerWidth) / (minElementWidth));
-        Debug.Log("containerWidth: " + containerWidth);
-        Debug.Log("maxElements: " + maxElements);
-        float containerWidth_B = containerRect.sizeDelta.x;
-        Debug.Log("containerWidth_B: " + containerWidth_B);
+            Transform transform = image.transform;
+            transform.SetParent(containerRect);
+            transform.localScale = Vector3.one;
 
-        return maxElements;
+            _elementsList.Add(image);
+        }
+
+
+        private float GetElementWidth()
+        {
+            float result = _minElementWidth;
+
+            float containerWidth = containerRect.rect.width;
+            float dynamicWidth = containerWidth / dataArray.Array.Count;
+
+            if (dynamicWidth > _maxElementWidth)
+            {
+                result = _maxElementWidth;
+            }
+
+            if (dynamicWidth > _minElementWidth)
+            {
+                result = dynamicWidth;
+            }
+
+            return result;
+        }
+
+
+        private float GetElementHeight(int elementValue)
+        {
+            float maxHeight = containerRect.rect.height;
+            float elementRatio = (elementValue + 1f) / dataArray.Array.Count;
+
+            return maxHeight * elementRatio;
+        }
+
+
+        private Vector2 GetElementPosition(int imageIndex)
+        {
+            Vector2 result;
+
+            if ((_maxElementWidth + _padding) * dataArray.Array.Count < containerRect.rect.width)
+            {
+                result = GetElementPositionEquilibrium(imageIndex);
+            }
+            else
+            {
+                result = GetElementPositionFlat(imageIndex);
+            }
+
+            return result;
+        }
+
+
+        private Vector2 GetElementPositionFlat(int imageIndex)
+        {
+            Rect rect = containerRect.rect;
+            float containerWidth = rect.width;
+            float startingX = containerWidth * 0.5f * -1;
+            float xPos = startingX + _elementWidth * imageIndex + _elementWidth * 0.5f;
+
+            Vector2 result = new Vector2(xPos, rect.height * 0.5f * -1);
+            return result;
+        }
+
+
+        private Vector2 GetElementPositionEquilibrium(int imageIndex)
+        {
+            Rect rect = containerRect.rect;
+            float containerWidth = rect.width;
+            float xOffset = 1f / (dataArray.Array.Count + 1);
+
+            float gap = containerWidth * xOffset;
+            float xPos = containerWidth * 0.5f * -1 + gap * (imageIndex + 1);
+
+            Vector2 result = new Vector2(xPos, rect.height * 0.5f * -1);
+
+            return result;
+        }
+
+
+        private float CalculateDynamicWidth()
+        {
+            float containerWidth = containerRect.rect.width;
+            return containerWidth / 40;
+        }
     }
 }

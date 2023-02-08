@@ -1,37 +1,47 @@
 ﻿using UnityEngine;
+using VisualizerSettings;
 
-public enum VisualizerTypes 
+namespace ArrayVisualizer
 {
-    Column
-}
-abstract public class VisualizerBase
-{
-    public abstract int CalculateMaxArrayNumber();
-    public abstract void Build();
-    public abstract void UpdateElement(int elementIndex);
-    public abstract void UpdateContainer();
-
-    public virtual void RemoveMarks()
+    public enum VisualizerTypes
     {
-        visualizationColoring.RemoveMarks();
-    }
-    public virtual void MarkElements()
-    {
-        visualizationColoring.MarkElements();
+        Column
     }
 
-    public virtual void AddMarks(params ElementColor[] indexArray)
+    public abstract class VisualizerBase
     {
-        visualizationColoring.AddMarks(indexArray);
-    }
+        protected RectTransform containerRect;
+        protected DataArray dataArray;
+        protected Settings settings;
+        protected VisualizationColoringBase visualizationColoring;
 
-    public virtual void MarkForCheck(int index, bool isWrong)
-    {
-        visualizationColoring.MarkForCheck(index, isWrong);
-    }
+        public abstract int CalculateMaxArrayNumber();
+        public abstract void Build();
+        public abstract void UpdateElement(int elementIndex);
+        public abstract void UpdateContainer();
 
-    protected RectTransform containerRect;
-    protected DataArray dataArray;
-    protected VisualizationColoringBase visualizationColoring;
-    protected Settings settings;
+
+        public virtual void RemoveMarks()
+        {
+            visualizationColoring.RemoveMarks();
+        }
+
+
+        public virtual void MarkElements()
+        {
+            visualizationColoring.MarkElements();
+        }
+
+
+        public virtual void AddMarks(params ElementColor[] indexArray)
+        {
+            visualizationColoring.AddMarks(indexArray);
+        }
+
+
+        public virtual void MarkForCheck(int index, bool isWrong)
+        {
+            visualizationColoring.MarkForCheck(index, isWrong);
+        }
+    }
 }

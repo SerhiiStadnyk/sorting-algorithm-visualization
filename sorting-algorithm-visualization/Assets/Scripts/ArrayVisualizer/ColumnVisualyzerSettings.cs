@@ -1,12 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "ColumnVisualyzerSettings", menuName = "ScriptableObjects/SpawnColumnSettings", order = 1)]
-public class ColumnVisualyzerSettings : ScriptableObject
+namespace ArrayVisualizer
 {
-    public float minElementWidth = 3;
-    public float maxElementWidth = 25;
-    public int padding = 5;
-    public bool dynamicWidth = false;
+    [CreateAssetMenu(fileName = "ColumnVisualyzerSettings", menuName = "ScriptableObjects/SpawnColumnSettings", order = 1)]
+    public class ColumnVisualyzerSettings : ScriptableObject
+    {
+        [FormerlySerializedAs("minElementWidth")]
+        [SerializeField]
+        private float _minElementWidth = 3;
+
+        [FormerlySerializedAs("maxElementWidth")]
+        [SerializeField]
+        private float _maxElementWidth = 25;
+
+        [FormerlySerializedAs("padding")]
+        [SerializeField]
+        private int _padding = 5;
+
+        [FormerlySerializedAs("dynamicWidth")]
+        [SerializeField]
+        private bool _dynamicWidth;
+
+        public float MinElementWidth => _minElementWidth;
+
+        public float MaxElementWidth => _maxElementWidth;
+
+        public int Padding => _padding;
+
+        public bool DynamicWidth => _dynamicWidth;
+    }
 }

@@ -1,68 +1,83 @@
 ﻿using System.Collections.Generic;
+using ArrayVisualizer;
 using UnityEngine;
 
-public class InsertionBinarySorting : SortingAlgorithmBase
+namespace SortingAlgorithms
 {
-    int min;
-    int max;
-
-    public InsertionBinarySorting(ISortingHandable handleable) : base(handleable) { }
-    public override IEnumerable<int> Sort()
+    public class InsertionBinarySorting : SortingAlgorithmBase
     {
-        for (int i = 1; i < Array.Count; i++)
+        private int _max;
+        private int _min;
+
+
+        public InsertionBinarySorting(ISortingHandable handleable) : base(handleable)
         {
-            if (Array[i] >= Array[i - 1])
-            {
-                continue;
-            }
-            CompareElements(true, ElementColor.Build(i, Color.green));
-            yield return i;
+        }
 
-            min = 0;
-            max = i;
 
-            while (min <= max)
+        public override IEnumerable<int> Sort()
+        {
+            for (int i = 1; i < Array.Count; i++)
             {
-                int key = Array[i];
-                int mid = (min + max) / 2;
-                CompareElements(true,
-                    ElementColor.Build(i, Color.green),
-                    ElementColor.Build(mid, Color.red));
+                if (Array[i] >= Array[i - 1])
+                {
+                    continue;
+                }
+
+                CompareElements(true, ElementColor.Build(i, Color.green));
                 yield return i;
 
-                if (mid == 0 && key <= Array[mid])
+                _min = 0;
+                _max = i;
+
+                while (_min <= _max)
                 {
-                    ShiftArray(mid, i, Array);
-                    break;
-                }
-                if (key <= Array[mid + 1] && key >= Array[mid])
-                {
-                    ShiftArray(++mid, i, Array);
-                    break;
-                }
-                else if (key < Array[mid])
-                {
-                    max = mid - 1;
-                }
-                else
-                {
-                    min = mid + 1;
+                    int key = Array[i];
+                    int mid = (_min + _max) / 2;
+                    CompareElements(
+                        true,
+                        ElementColor.Build(i, Color.green),
+                        ElementColor.Build(mid, Color.red));
+                    yield return i;
+
+                    if (mid == 0 && key <= Array[mid])
+                    {
+                        ShiftArray(mid, i, Array);
+                        break;
+                    }
+
+                    if (key <= Array[mid + 1] && key >= Array[mid])
+                    {
+                        ShiftArray(++mid, i, Array);
+                        break;
+                    }
+
+                    if (key < Array[mid])
+                    {
+                        _max = mid - 1;
+                    }
+                    else
+                    {
+                        _min = mid + 1;
+                    }
                 }
             }
+
+            FinishSorting();
         }
 
-        FinishSorting();
-    }
 
-    private void ShiftArray(int fromIndex, int toIndex, List<int> array)
-    {
-        int frontElement = array[toIndex];
-        for (int i = toIndex; i > fromIndex; i--)
+        private void ShiftArray(int fromIndex, int toIndex, List<int> array)
         {
-            array[i] = array[i - 1];
-            RelocateElements(i, i - 1);
+            int frontElement = array[toIndex];
+            for (int i = toIndex; i > fromIndex; i--)
+            {
+                array[i] = array[i - 1];
+                RelocateElements(i, i - 1);
+            }
+
+            array[fromIndex] = frontElement;
+            RelocateElements(fromIndex, 0);
         }
-        array[fromIndex] = frontElement;
-        RelocateElements(fromIndex, 0);
     }
 }

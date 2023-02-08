@@ -1,26 +1,37 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Serialization;
+using VisualizerSettings;
 
-[CreateAssetMenu(fileName = "VisualizersList", menuName = "ScriptableObjects/SpawnVisualizersList", order = 1)]
-public class VisualizersList : ScriptableObject
+namespace ArrayVisualizer
 {
-    public ColumnVisualyzerSettings columnSettings;
-
-    public VisualizerBase GetVisualizator(VisualizerTypes visualizerType, DataArray dataArray, RectTransform containerRect, Settings settings) 
+    [CreateAssetMenu(fileName = "VisualizersList", menuName = "ScriptableObjects/SpawnVisualizersList", order = 1)]
+    public class VisualizersList : ScriptableObject
     {
-        switch (visualizerType)
+        [FormerlySerializedAs("columnSettings")]
+        [SerializeField]
+        private ColumnVisualyzerSettings _columnSettings;
+
+
+        public VisualizerBase GetVisualizer(
+            VisualizerTypes visualizerType,
+            DataArray dataArray,
+            RectTransform containerRect,
+            Settings settings)
         {
-            case VisualizerTypes.Column:
-                return GetVisualyzerColumn(dataArray, containerRect, settings);
-            default:
-                return GetVisualyzerColumn(dataArray, containerRect, settings);
+            switch (visualizerType)
+            {
+                case VisualizerTypes.Column:
+                    return GetVisualizerColumn(dataArray, containerRect, settings);
+                default:
+                    return GetVisualizerColumn(dataArray, containerRect, settings);
+            }
         }
-    }
 
-    private VisualizerBase GetVisualyzerColumn(DataArray dataArray, RectTransform containerRect, Settings settings) 
-    {
-        ColumnVisualizer visualizer = new ColumnVisualizer(columnSettings, dataArray, containerRect, settings);
-        return visualizer;
+
+        private VisualizerBase GetVisualizerColumn(DataArray dataArray, RectTransform containerRect, Settings settings)
+        {
+            ColumnVisualizer visualizer = new ColumnVisualizer(_columnSettings, dataArray, containerRect, settings);
+            return visualizer;
+        }
     }
 }
