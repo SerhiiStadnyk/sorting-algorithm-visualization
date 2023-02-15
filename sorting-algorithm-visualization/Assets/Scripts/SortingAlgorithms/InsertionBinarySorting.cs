@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using ArrayVisualizer;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ namespace SortingAlgorithms
         }
 
 
-        public override IEnumerable<int> Sort()
+        public override IEnumerator Sort()
         {
             for (int i = 1; i < Array.Count; i++)
             {
@@ -25,7 +26,10 @@ namespace SortingAlgorithms
                 }
 
                 CompareElements(true, ElementColor.Build(i, Color.green));
-                yield return i;
+                if (!Handleable.CanProceedSorting)
+                {
+                    yield return new WaitUntil(() => Handleable.CanProceedSorting);
+                }
 
                 _min = 0;
                 _max = i;
@@ -38,7 +42,10 @@ namespace SortingAlgorithms
                         true,
                         ElementColor.Build(i, Color.green),
                         ElementColor.Build(mid, Color.red));
-                    yield return i;
+                    if (!Handleable.CanProceedSorting)
+                    {
+                        yield return new WaitUntil(() => Handleable.CanProceedSorting);
+                    }
 
                     if (mid == 0 && key <= Array[mid])
                     {

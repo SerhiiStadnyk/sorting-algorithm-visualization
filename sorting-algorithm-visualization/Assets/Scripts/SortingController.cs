@@ -36,7 +36,8 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
     private List<int> _tmpArray;
 
-    private int counter = 1;
+    private int _calculationPerFrameCounter = 0;
+    private float _time;
 
     public bool IsSorting { get; private set; }
 
@@ -45,6 +46,11 @@ public class SortingController : MonoBehaviour, ISortingHandable
         get => _dataArray.Array;
         set => _dataArray.Array = value;
     }
+
+
+    public bool IsVisualUpdateNeeded => _calculationPerFrameCounter >= _settings.SortingTactsPerFrame;
+
+    public bool CanProceedSorting => !IsVisualUpdateNeeded;
 
 
     public void RelocateElements(int fromIndex, int toIndex)
@@ -74,12 +80,19 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
     public void MarkElements(bool count = false, params ElementColor[] markedElements)
     {
+        _calculationPerFrameCounter++;
+
         if (count)
         {
             TextAddValue(_comparesInfo, markedElements.Length);
         }
 
         _arrayVisualizer.AddMarks(markedElements);
+
+        if (IsVisualUpdateNeeded)
+        {
+            StartCoroutine(UpdateVisualizer());
+        }
     }
 
 
@@ -200,41 +213,30 @@ public class SortingController : MonoBehaviour, ISortingHandable
 
     private IEnumerator StateSorting()
     {
-        float time = Time.realtimeSinceStartup;
-        foreach (int i in _sortingAlgorithm.Sort())
+        _time = Time.realtimeSinceStartup;
+        yield return _sortingAlgorithm.Sort();
+        _timeInfo.text = (Time.realtimeSinceStartup - _time).ToString();
+    }
+
+
+    public IEnumerator UpdateVisualizer()
+    {
+        if (!IsSorting)
         {
-            if (counter >= _settings.SortingTactsPerFrame)
-            {
-                if (!IsSorting)
-                {
-                    yield break;
-                }
-
-                counter = 1;
-                _arrayVisualizer.MarkElements();
-                if (!_settings.FastSort)
-                {
-                    yield return new WaitForSeconds(_settings.Delay / 1000f);
-                }
-
-                _timeInfo.text = (Time.realtimeSinceStartup - time).ToString();
-            }
-            else
-            {
-                counter++;
-            }
+            yield break;
         }
 
-        if (!_settings.FastSort)
-        {
-            _timeInfo.text = (Time.realtimeSinceStartup - time).ToString();
-        }
+        _arrayVisualizer.MarkElements();
+        yield return new WaitForSeconds(_settings.Delay / 1000f);
+
+        _timeInfo.text = (Time.realtimeSinceStartup - _time).ToString();
+        _calculationPerFrameCounter = 0;
     }
 
 
     private IEnumerator CheckData()
     {
-        counter = 0;
+        _calculationPerFrameCounter = 0;
         _arrayVisualizer.RemoveMarks();
         for (int i = 0; i < _dataArray.Array.Count; i++)
         {
@@ -247,13 +249,13 @@ public class SortingController : MonoBehaviour, ISortingHandable
                 _arrayVisualizer.MarkForCheck(i, false);
             }
 
-            if (counter == Array.Count / 60)
+            if (_calculationPerFrameCounter == Array.Count / 60)
             {
-                counter = 0;
+                _calculationPerFrameCounter = 0;
                 yield return null;
             }
 
-            counter++;
+            _calculationPerFrameCounter++;
         }
 
         IsSorting = false;

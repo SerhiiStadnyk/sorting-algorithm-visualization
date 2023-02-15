@@ -53,8 +53,6 @@ namespace VisualizerSettings
 
         public int SortingTactsPerFrame { get; private set; } = 1;
 
-        public bool FastSort { get; private set; }
-
 
         public void SetDelay(int value)
         {

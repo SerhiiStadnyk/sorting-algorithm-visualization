@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using ArrayVisualizer;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace SortingAlgorithms
         }
 
 
-        public override IEnumerable<int> Sort()
+        public override IEnumerator Sort()
         {
             int startPoint = 0;
             int endPoint = Array.Count - 1;
@@ -21,10 +22,7 @@ namespace SortingAlgorithms
 
             do
             {
-                foreach (int i in SortChunk(startPoint, endPoint))
-                {
-                    yield return 0;
-                }
+                yield return SortChunk(startPoint, endPoint);
 
                 median = (endPoint - startPoint) / 2;
                 if (endPoint > startPoint && median != 0)
@@ -71,7 +69,7 @@ namespace SortingAlgorithms
                     Debug.Log("End Point " + endPoint);
                 }
 
-                yield return 0;
+                yield return null;
             }
             while (endPoint < Array.Count);
 
@@ -79,7 +77,7 @@ namespace SortingAlgorithms
         }
 
 
-        private IEnumerable<int> SortChunk(int startIndex, int endIndex)
+        private IEnumerator SortChunk(int startIndex, int endIndex)
         {
             int median = GetMedianSimple(startIndex, endIndex);
             int rightOffset = 0;
@@ -108,15 +106,15 @@ namespace SortingAlgorithms
                         {
                             SwapElements(i, a);
 
-                            //yield return a;
+                            //yield return null;
                             break;
                         }
 
-                        yield return a;
+                        yield return null;
                     }
                 }
 
-                yield return i;
+                yield return null;
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using ArrayVisualizer;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace SortingAlgorithms
         }
 
 
-        public override IEnumerable<int> Sort()
+        public override IEnumerator Sort()
         {
             for (int i = 1; i < Array.Count; i++)
             {
@@ -24,7 +25,11 @@ namespace SortingAlgorithms
                     true,
                     ElementColor.Build(i, Color.green),
                     ElementColor.Build(i - 1, Color.red));
-                yield return i;
+
+                if (!Handleable.CanProceedSorting)
+                {
+                    yield return new WaitUntil(() => Handleable.CanProceedSorting);
+                }
 
                 for (int a = i; a > 0; a--)
                 {
@@ -33,7 +38,12 @@ namespace SortingAlgorithms
                         true,
                         ElementColor.Build(i, Color.green),
                         ElementColor.Build(b, Color.red));
-                    yield return a;
+
+                    if (!Handleable.CanProceedSorting)
+                    {
+                        yield return new WaitUntil(() => Handleable.CanProceedSorting);
+                    }
+
                     if (Array[i] >= Array[b])
                     {
                         ShiftArray(b + 1, i, Array);

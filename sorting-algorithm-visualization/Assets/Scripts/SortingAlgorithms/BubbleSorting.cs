@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
 using ArrayVisualizer;
 using UnityEngine;
 
@@ -11,7 +11,7 @@ namespace SortingAlgorithms
         }
 
 
-        public override IEnumerable<int> Sort()
+        public override IEnumerator Sort()
         {
             for (int i = 0; i < Array.Count; i++)
             {
@@ -29,7 +29,11 @@ namespace SortingAlgorithms
                         true,
                         ElementColor.Build(a, Color.red),
                         ElementColor.Build(a + 1, Color.red));
-                    yield return i;
+
+                    if (!Handleable.CanProceedSorting)
+                    {
+                        yield return new WaitUntil(() => Handleable.CanProceedSorting);
+                    }
                 }
 
                 if (isSorted)

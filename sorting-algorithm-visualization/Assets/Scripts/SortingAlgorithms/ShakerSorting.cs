@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
 using ArrayVisualizer;
 using UnityEngine;
 
@@ -21,7 +21,7 @@ namespace SortingAlgorithms
         }
 
 
-        public override IEnumerable<int> Sort()
+        public override IEnumerator Sort()
         {
             bool flip = true;
 
@@ -29,19 +29,13 @@ namespace SortingAlgorithms
             {
                 if (flip)
                 {
-                    foreach (int a in LeftSort())
-                    {
-                        yield return 0;
-                    }
+                    yield return LeftSort();
 
                     flip = false;
                 }
                 else
                 {
-                    foreach (int a in RightSort())
-                    {
-                        yield return 0;
-                    }
+                    yield return RightSort();
 
                     flip = true;
                 }
@@ -59,7 +53,7 @@ namespace SortingAlgorithms
         protected override ISortingHandable Handleable { get; set; }
 
 
-        private IEnumerable<int> LeftSort()
+        private IEnumerator LeftSort()
         {
             _wasSorted = false;
             int offset = 0;
@@ -84,7 +78,10 @@ namespace SortingAlgorithms
                     true,
                     ElementColor.Build(i, Color.red),
                     ElementColor.Build(i + 1, Color.red));
-                yield return i;
+                if (!Handleable.CanProceedSorting)
+                {
+                    yield return new WaitUntil(() => Handleable.CanProceedSorting);
+                }
             }
 
             _leftCounter++;
@@ -93,7 +90,7 @@ namespace SortingAlgorithms
         }
 
 
-        private IEnumerable<int> RightSort()
+        private IEnumerator RightSort()
         {
             _wasSorted = false;
             int offset = 0;
@@ -118,7 +115,10 @@ namespace SortingAlgorithms
                     true,
                     ElementColor.Build(i, Color.red),
                     ElementColor.Build(i - 1, Color.red));
-                yield return i;
+                if (!Handleable.CanProceedSorting)
+                {
+                    yield return new WaitUntil(() => Handleable.CanProceedSorting);
+                }
             }
 
             _rightCounter++;

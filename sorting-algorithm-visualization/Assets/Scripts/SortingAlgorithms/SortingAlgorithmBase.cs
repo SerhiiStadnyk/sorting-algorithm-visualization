@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using ArrayVisualizer;
 
 namespace SortingAlgorithms
 {
     public abstract class SortingAlgorithmBase
     {
-        public abstract IEnumerable<int> Sort();
+        public abstract IEnumerator Sort();
 
 
         protected SortingAlgorithmBase(ISortingHandable insertedRelocatable)
